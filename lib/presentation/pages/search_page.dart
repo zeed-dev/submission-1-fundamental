@@ -16,25 +16,21 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  TextEditingController _searchController = TextEditingController();
   bool isSearch = false;
   List<Restaurant> _dataList = [];
   String _query = "";
 
-  _SearchPageState() {
-    _searchController.addListener(() {
-      if (_searchController.text.isEmpty) {
-        setState(() {
-          isSearch = false;
-          _query = "";
-        });
-      } else {
-        setState(() {
-          isSearch = true;
-          _query = _searchController.text;
-        });
+  List<Restaurant> _filterListData() {
+    List<Restaurant> _filterList = [];
+
+    for (var i = 0; i < _dataList.length; i++) {
+      var _data = _dataList[i];
+      if (_data.name.toLowerCase().contains(_query.toLowerCase())) {
+        _filterList.add(_data);
       }
-    });
+    }
+
+    return _filterList;
   }
 
   Widget _buildDataNotFound() {
@@ -53,7 +49,19 @@ class _SearchPageState extends State<SearchPage> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: margin),
       child: TextField(
-        controller: _searchController,
+        onChanged: (query) {
+          if (query.isEmpty) {
+            setState(() {
+              isSearch = false;
+              _query = "";
+            });
+          } else {
+            setState(() {
+              isSearch = true;
+              _query = query;
+            });
+          }
+        },
         decoration: InputDecoration(
           hintText: "Search Restaurant",
           prefixIcon: Icon(Icons.search),
@@ -62,19 +70,6 @@ class _SearchPageState extends State<SearchPage> {
         textInputAction: TextInputAction.search,
       ),
     );
-  }
-
-  List<Restaurant> _filterListData() {
-    List<Restaurant> _filterList = [];
-
-    for (var i = 0; i < _dataList.length; i++) {
-      var _data = _dataList[i];
-      if (_data.name.toLowerCase().contains(_query.toLowerCase())) {
-        _filterList.add(_data);
-      }
-    }
-
-    return _filterList;
   }
 
   Widget _buildSeraching({
