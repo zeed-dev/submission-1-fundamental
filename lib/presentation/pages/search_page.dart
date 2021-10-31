@@ -64,9 +64,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildSeraching({required BuildContext context}) {
-    BookmarkNotifer _bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
-
+  List<Restaurant> _filterListData() {
     List<Restaurant> _filterList = [];
 
     for (var i = 0; i < _dataList.length; i++) {
@@ -76,11 +74,18 @@ class _SearchPageState extends State<SearchPage> {
       }
     }
 
-    return _filterList.isEmpty
+    return _filterList;
+  }
+
+  Widget _buildSeraching({
+    required BuildContext context,
+    required BookmarkNotifer bookmarkNotifer,
+  }) {
+    return _filterListData().isEmpty
         ? _buildDataNotFound()
         : Expanded(
             child: ListView.builder(
-              itemCount: _filterList.length,
+              itemCount: _filterListData().length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.symmetric(
@@ -88,13 +93,15 @@ class _SearchPageState extends State<SearchPage> {
                     vertical: 10,
                   ),
                   child: CardRestaurant(
-                    isBookmark: _bookmarkNotifer.isBookmark(_filterList[index]),
-                    restaurant: _filterList[index],
+                    isBookmark: bookmarkNotifer.isBookmark(
+                      _filterListData()[index],
+                    ),
+                    restaurant: _filterListData()[index],
                     onTap: () {
                       Navigator.pushNamed(
                         context,
                         DetailPage.ROUTE_NAME,
-                        arguments: _filterList[index],
+                        arguments: _filterListData()[index],
                       );
                     },
                   ),
@@ -123,7 +130,7 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    BookmarkNotifer bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
+    BookmarkNotifer _bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -171,7 +178,10 @@ class _SearchPageState extends State<SearchPage> {
                   );
 
                   return isSearch
-                      ? _buildSeraching(context: context)
+                      ? _buildSeraching(
+                          context: context,
+                          bookmarkNotifer: _bookmarkNotifer,
+                        )
                       : Expanded(
                           child: ListView.builder(
                             itemCount: 10,
@@ -182,7 +192,7 @@ class _SearchPageState extends State<SearchPage> {
                                   vertical: 10,
                                 ),
                                 child: CardRestaurant(
-                                  isBookmark: bookmarkNotifer.isBookmark(
+                                  isBookmark: _bookmarkNotifer.isBookmark(
                                     restaurants[index],
                                   ),
                                   restaurant: restaurants[index],

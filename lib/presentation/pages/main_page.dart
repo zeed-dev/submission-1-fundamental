@@ -14,6 +14,31 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  Widget _buildBottomNavBar({required PageNotifier? pageNotifier}) {
+    return BottomNavigationBar(
+      selectedItemColor: KBlueSecondary,
+      unselectedItemColor: kGreySecondary,
+      currentIndex: pageNotifier!.currentIndex,
+      onTap: (index) {
+        pageNotifier.currentIndex = index;
+      },
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
+          label: "Home",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.bookmark_border_outlined),
+          label: "Bookmark",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person_outline),
+          label: "Home",
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     PageNotifier _pageNotifier = Provider.of<PageNotifier>(context);
@@ -26,27 +51,8 @@ class _MainPageState extends State<MainPage> {
 
     return Scaffold(
       body: _screen[_pageNotifier.currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: KBlueSecondary,
-        unselectedItemColor: kGreySecondary,
-        currentIndex: _pageNotifier.currentIndex,
-        onTap: (index) {
-          _pageNotifier.currentIndex = index;
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark_border_outlined),
-            label: "Bookmark",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: "Home",
-          ),
-        ],
+      bottomNavigationBar: _buildBottomNavBar(
+        pageNotifier: _pageNotifier,
       ),
     );
   }

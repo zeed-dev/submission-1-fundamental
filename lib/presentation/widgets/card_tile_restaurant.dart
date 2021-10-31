@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_store_app/common/constants.dart';
 import 'package:food_store_app/model/restaurant_model.dart';
+import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
+import 'package:provider/provider.dart';
 
 class CardTileRestaurant extends StatelessWidget {
   final Restaurant? restaurant;
@@ -15,6 +17,8 @@ class CardTileRestaurant extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BookmarkNotifer _bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
+
     return InkWell(
       onTap: () {
         onTap!();
@@ -28,6 +32,7 @@ class CardTileRestaurant extends StatelessWidget {
           color: Color(0xffF6F6F6),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
@@ -94,6 +99,11 @@ class CardTileRestaurant extends StatelessWidget {
                 ],
               ),
             ),
+            Icon(
+              _bookmarkNotifer.isBookmark(restaurant!)
+                  ? Icons.bookmark
+                  : Icons.bookmark_outline,
+            )
           ],
         ),
       ),
