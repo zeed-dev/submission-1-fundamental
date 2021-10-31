@@ -58,13 +58,6 @@ class ProfilePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: Icon(
-                    Icons.exit_to_app,
-                    color: kBlack,
-                  ),
-                )
               ],
             ),
           ),

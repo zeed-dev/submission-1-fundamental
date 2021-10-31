@@ -16,7 +16,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    PageNotifier pageNotifier = Provider.of<PageNotifier>(context);
+    PageNotifier _pageNotifier = Provider.of<PageNotifier>(context);
 
     List _screen = [
       HomePage(),
@@ -25,13 +25,13 @@ class _MainPageState extends State<MainPage> {
     ];
 
     return Scaffold(
-      body: _screen[pageNotifier.currentIndex],
+      body: _screen[_pageNotifier.currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: KBlueSecondary,
         unselectedItemColor: kGreySecondary,
-        currentIndex: pageNotifier.currentIndex,
+        currentIndex: _pageNotifier.currentIndex,
         onTap: (index) {
-          pageNotifier.currentIndex = index;
+          _pageNotifier.currentIndex = index;
         },
         items: [
           BottomNavigationBarItem(

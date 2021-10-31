@@ -37,6 +37,18 @@ class _SearchPageState extends State<SearchPage> {
     });
   }
 
+  Widget _buildDataNotFound() {
+    return SingleChildScrollView(
+      child: Center(
+        child: LottieBuilder.asset(
+          "assets/trash.json",
+          width: 200,
+          height: 200,
+        ),
+      ),
+    );
+  }
+
   Widget _buildTextField() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: margin),
@@ -53,7 +65,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildSeraching({required BuildContext context}) {
-    BookmarkNotifer bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
+    BookmarkNotifer _bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
 
     List<Restaurant> _filterList = [];
 
@@ -65,16 +77,7 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     return _filterList.isEmpty
-        ? Container(
-            margin: EdgeInsets.only(top: 50),
-            child: Center(
-              child: LottieBuilder.asset(
-                "assets/trash.json",
-                width: 200,
-                height: 200,
-              ),
-            ),
-          )
+        ? _buildDataNotFound()
         : Expanded(
             child: ListView.builder(
               itemCount: _filterList.length,
@@ -85,7 +88,7 @@ class _SearchPageState extends State<SearchPage> {
                     vertical: 10,
                   ),
                   child: CardRestaurant(
-                    isBookmark: bookmarkNotifer.isBookmark(_filterList[index]),
+                    isBookmark: _bookmarkNotifer.isBookmark(_filterList[index]),
                     restaurant: _filterList[index],
                     onTap: () {
                       Navigator.pushNamed(

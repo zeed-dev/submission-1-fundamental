@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_store_app/common/constants.dart';
+import 'package:food_store_app/model/drink_model.dart';
 import 'package:food_store_app/model/restaurant_model.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:provider/provider.dart';
@@ -115,11 +116,11 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
-    Widget _buildFoodItems() {
+    Widget _buildMenuItems(List<Drink> data) {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: margin),
         child: Column(
-            children: widget.restaurant!.menus.foods.map((e) {
+            children: data.map((e) {
           return Row(
             children: [
               Image.asset(
@@ -139,31 +140,7 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
-    Widget _buildDrinkItems() {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: margin),
-        child: Column(
-            children: widget.restaurant!.menus.drinks.map((e) {
-          return Row(
-            children: [
-              Image.asset(
-                "assets/ellipse.png",
-                width: 8,
-              ),
-              SizedBox(
-                width: 15,
-              ),
-              Text(
-                e.name,
-                style: kSubtitle,
-              )
-            ],
-          );
-        }).toList()),
-      );
-    }
-
-    Widget customBottomNavbarDetail() {
+    Widget _customBottomNavbarDetail() {
       return Container(
         height: 70,
         width: double.infinity,
@@ -183,7 +160,6 @@ class _DetailPageState extends State<DetailPage> {
           children: [
             InkWell(
               onTap: () {
-                print("CLICKED");
                 _bookmarkNotifer.setRestaurant(widget.restaurant!);
                 Flushbar(
                   message: _bookmarkNotifer.isBookmark(widget.restaurant!)
@@ -241,7 +217,7 @@ class _DetailPageState extends State<DetailPage> {
     }
 
     return Scaffold(
-      bottomNavigationBar: customBottomNavbarDetail(),
+      bottomNavigationBar: _customBottomNavbarDetail(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -337,7 +313,7 @@ class _DetailPageState extends State<DetailPage> {
               SizedBox(
                 height: 11,
               ),
-              _buildFoodItems(),
+              _buildMenuItems(widget.restaurant!.menus.foods),
               SizedBox(
                 height: 16,
               ),
@@ -353,7 +329,7 @@ class _DetailPageState extends State<DetailPage> {
               SizedBox(
                 height: 11,
               ),
-              _buildDrinkItems(),
+              _buildMenuItems(widget.restaurant!.menus.drinks),
               SizedBox(
                 height: 10,
               )
