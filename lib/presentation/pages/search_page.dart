@@ -76,11 +76,12 @@ class _SearchPageState extends State<SearchPage> {
     required BuildContext context,
     required BookmarkNotifer bookmarkNotifer,
   }) {
+    var _dataRestaurant = _filterListData();
     return _filterListData().isEmpty
         ? _buildDataNotFound()
         : Expanded(
             child: ListView.builder(
-              itemCount: _filterListData().length,
+              itemCount: _dataRestaurant.length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.symmetric(
@@ -89,14 +90,14 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   child: CardRestaurant(
                     isBookmark: bookmarkNotifer.isBookmark(
-                      _filterListData()[index],
+                      _dataRestaurant[index],
                     ),
-                    restaurant: _filterListData()[index],
+                    restaurant: _dataRestaurant[index],
                     onTap: () {
                       Navigator.pushNamed(
                         context,
                         DetailPage.ROUTE_NAME,
-                        arguments: _filterListData()[index],
+                        arguments: _dataRestaurant[index],
                       );
                     },
                   ),
