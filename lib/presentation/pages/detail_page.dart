@@ -192,7 +192,14 @@ class _DetailPageState extends State<DetailPage> {
             ),
             Expanded(
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  Flushbar(
+                    flushbarPosition: FlushbarPosition.TOP,
+                    message: "Go To Restaurant",
+                    duration: Duration(seconds: 3),
+                    backgroundColor: KBlue,
+                  ).show(context);
+                },
                 child: Container(
                   height: 48,
                   decoration: BoxDecoration(
