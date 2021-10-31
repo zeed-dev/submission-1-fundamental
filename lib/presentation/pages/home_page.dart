@@ -29,6 +29,9 @@ class HomePage extends StatelessWidget {
             final List<Restaurant> restaurants = restaurantsParse(
               snapshot.data,
             );
+
+            restaurants.removeRange(0, 3);
+
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: margin),
               child: Column(
