@@ -2,8 +2,8 @@
     package="com.example.food_store_app">
    <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="food_store_app"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Food Store"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
