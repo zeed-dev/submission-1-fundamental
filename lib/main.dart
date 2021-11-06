@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_store_app/model/restaurant_model.dart';
+import 'package:food_store_app/data/model/restaurant_model.dart';
 import 'package:food_store_app/presentation/pages/detail_page.dart';
 import 'package:food_store_app/presentation/pages/main_page.dart';
 import 'package:food_store_app/presentation/pages/search_page.dart';
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
             case OnboardingPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => OnboardingPage());
             case DetailPage.ROUTE_NAME:
-              final restaurant = settings.arguments as Restaurant;
+              final restaurant = settings.arguments as RestaurantModel;
               return CupertinoPageRoute(
                 builder: (_) => DetailPage(
                   restaurant: restaurant,

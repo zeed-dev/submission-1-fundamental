@@ -3,15 +3,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_store_app/common/constants.dart';
-import 'package:food_store_app/model/drink_model.dart';
-import 'package:food_store_app/model/restaurant_model.dart';
+import 'package:food_store_app/data/model/drink_model.dart';
+import 'package:food_store_app/data/model/restaurant_model.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class DetailPage extends StatefulWidget {
   static const ROUTE_NAME = "/detail-page";
-  final Restaurant? restaurant;
+  final RestaurantModel? restaurant;
 
   DetailPage({
     required this.restaurant,
@@ -115,7 +115,7 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
-    Widget _buildMenuItems(List<Drink> data) {
+    Widget _buildMenuItems(List<DrinkModel> data) {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: margin),
         child: Column(
