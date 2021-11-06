@@ -1,41 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:food_store_app/common/constants.dart';
+import 'package:food_store_app/common/state_enum.dart';
 import 'package:food_store_app/data/model/restaurant_model.dart';
+import 'package:food_store_app/domain/entities/restaurant.dart';
 import 'package:food_store_app/presentation/pages/detail_page.dart';
 import 'package:food_store_app/presentation/pages/search_page.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
+import 'package:food_store_app/presentation/provider/restaurant_notifer.dart';
 import 'package:food_store_app/presentation/widgets/card_restaruant.dart';
 import 'package:food_store_app/presentation/widgets/card_tile_restaurant.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static const ROUTE_NAME = "/home-page";
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    Future.microtask(
+      () => Provider.of<RestaurantNotifier>(
+        context,
+        listen: false,
+      ).fetchRestaurant(),
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     BookmarkNotifer bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
 
-    Widget _buildCardListTile() {
-      return FutureBuilder<String>(
-        future: DefaultAssetBundle.of(context).loadString(
-          "assets/data.json",
-        ),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+    Widget _buildRecomendedRestaurant() {
+      return Consumer<RestaurantNotifier>(
+        builder: (context, data, child) {
+          if (data.restaurantState == RequestState.Loading) {
             return Center(
               child: CircularProgressIndicator(),
             );
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            final List<RestaurantModel> restaurants = restaurantsParse(
-              snapshot.data,
+          } else if (data.restaurantState == RequestState.Loaded) {
+            return Container(
+              height: 179,
+              width: double.infinity,
+              child: ListView.builder(
+                itemCount: 3,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.only(
+                      left: index == 0 ? margin : 0,
+                      right: index == 3 ? 0 : margin,
+                    ),
+                    child: CardRestaurant(
+                      isBookmark: bookmarkNotifer.isBookmark(
+                        data.restaurant[index],
+                      ),
+                      restaurant: data.restaurant[index],
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          DetailPage.ROUTE_NAME,
+                          arguments: data.restaurant[index],
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             );
+          } else {
+            return Text(data.message);
+          }
+        },
+      );
+    }
 
-            restaurants.removeRange(0, 3);
-
+    Widget _buildCardListTile() {
+      return Consumer<RestaurantNotifier>(
+        builder: (context, restaurant, child) {
+          if (restaurant.restaurantState == RequestState.Loading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (restaurant.restaurantState == RequestState.Loaded) {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: margin),
               child: Column(
-                children: restaurants.map(
+                children: restaurant.restaurant.map(
                   (e) {
                     return CardTileRestaurant(
                       restaurant: e,
@@ -52,57 +106,7 @@ class HomePage extends StatelessWidget {
               ),
             );
           } else {
-            return Text("Opps something worng!");
-          }
-        },
-      );
-    }
-
-    Widget _buildRecomendedRestaurant() {
-      return FutureBuilder<String>(
-        future: DefaultAssetBundle.of(context).loadString(
-          "assets/data.json",
-        ),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            final List<RestaurantModel> restaurants = restaurantsParse(
-              snapshot.data,
-            );
-            return Container(
-              height: 179,
-              width: double.infinity,
-              child: ListView.builder(
-                itemCount: 3,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(
-                      left: index == 0 ? margin : 0,
-                      right: index == 3 ? 0 : margin,
-                    ),
-                    child: CardRestaurant(
-                      isBookmark: bookmarkNotifer.isBookmark(
-                        restaurants[index],
-                      ),
-                      restaurant: restaurants[index],
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          DetailPage.ROUTE_NAME,
-                          arguments: restaurants[index],
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-            );
-          } else {
-            return Text("Opps something worng!");
+            return Text(restaurant.message);
           }
         },
       );

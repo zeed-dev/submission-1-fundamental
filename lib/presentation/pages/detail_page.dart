@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_store_app/common/constants.dart';
 import 'package:food_store_app/data/model/drink_model.dart';
-import 'package:food_store_app/data/model/restaurant_model.dart';
+import 'package:food_store_app/domain/entities/restaurant.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class DetailPage extends StatefulWidget {
   static const ROUTE_NAME = "/detail-page";
-  final RestaurantModel? restaurant;
+  final Restaurant? restaurant;
 
   DetailPage({
     required this.restaurant,
@@ -370,7 +370,7 @@ class _DetailPageState extends State<DetailPage> {
                 SizedBox(
                   height: 11,
                 ),
-                _buildMenuItems(widget.restaurant!.menus.foods),
+                // _buildMenuItems(widget.restaurant!.menus.foods),
                 SizedBox(
                   height: 16,
                 ),
@@ -386,7 +386,7 @@ class _DetailPageState extends State<DetailPage> {
                 SizedBox(
                   height: 11,
                 ),
-                _buildMenuItems(widget.restaurant!.menus.drinks),
+                // _buildMenuItems(widget.restaurant!.menus.drinks),
                 SizedBox(
                   height: 10,
                 )

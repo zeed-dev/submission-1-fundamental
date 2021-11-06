@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_store_app/common/constants.dart';
-import 'package:food_store_app/data/model/restaurant_model.dart';
+import 'package:food_store_app/domain/entities/restaurant.dart';
 
 class CardRestaurant extends StatelessWidget {
-  final RestaurantModel? restaurant;
+  final Restaurant? restaurant;
   final Function? onTap;
   final bool? isBookmark;
 
@@ -44,7 +44,7 @@ class CardRestaurant extends StatelessWidget {
                   child: CachedNetworkImage(
                     height: 46,
                     width: 46,
-                    imageUrl: restaurant!.pictureId,
+                    imageUrl: "$IMAGE_BASE_URL${restaurant!.pictureId}",
                     placeholder: (context, url) => Center(
                       child: CircularProgressIndicator(),
                     ),

@@ -1,9 +1,5 @@
-import 'dart:convert';
-
-import 'package:food_store_app/domain/entities/restaurant.dart';
-
-class RestaurantModel {
-  RestaurantModel({
+class Restaurant {
+  Restaurant({
     required this.id,
     required this.name,
     required this.description,
@@ -19,8 +15,7 @@ class RestaurantModel {
   String city;
   double rating;
 
-  factory RestaurantModel.fromJson(Map<String, dynamic> json) =>
-      RestaurantModel(
+  factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
         id: json["id"],
         name: json["name"],
         description: json["description"],
@@ -37,22 +32,4 @@ class RestaurantModel {
         "city": city,
         "rating": rating,
       };
-
-  Restaurant toEntity() => Restaurant(
-        id: id,
-        name: name,
-        description: description,
-        pictureId: pictureId,
-        city: city,
-        rating: rating,
-      );
-}
-
-List<Restaurant> restaurantsParse(String? data) {
-  if (data == null) {
-    return [];
-  }
-
-  final List restaurant = json.decode(data)["restaurants"];
-  return restaurant.map((e) => Restaurant.fromJson(e)).toList();
 }

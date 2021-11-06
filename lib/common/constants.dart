@@ -8,6 +8,9 @@ const Color kGreySecondary = Color(0xFFA7A5A5);
 const Color kWhite = Color(0xFFFFFFFF);
 const Color kBlack = Color(0xFF000000);
 
+// ignore: non_constant_identifier_names
+String IMAGE_BASE_URL = "https://restaurant-api.dicoding.dev/images/medium/";
+
 const double margin = 24;
 
 final TextStyle kHeading4 = GoogleFonts.nunito(
