@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_store_app/common/constants.dart';
-import 'package:food_store_app/model/restaurant_model.dart';
+import 'package:food_store_app/data/model/restaurant_model.dart';
 import 'package:food_store_app/presentation/pages/detail_page.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:food_store_app/presentation/widgets/card_restaruant.dart';
@@ -17,11 +17,11 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   bool isSearch = false;
-  List<Restaurant> _dataList = [];
+  List<RestaurantModel> _dataList = [];
   String _query = "";
 
-  List<Restaurant> _filterListData() {
-    List<Restaurant> _filterList = [];
+  List<RestaurantModel> _filterListData() {
+    List<RestaurantModel> _filterList = [];
 
     for (var i = 0; i < _dataList.length; i++) {
       var _data = _dataList[i];
@@ -117,7 +117,7 @@ class _SearchPageState extends State<SearchPage> {
     var data = await DefaultAssetBundle.of(context).loadString(
       "assets/data.json",
     );
-    final List<Restaurant> restaurants = restaurantsParse(data);
+    final List<RestaurantModel> restaurants = restaurantsParse(data);
 
     for (var item in restaurants) {
       _dataList.add(item);
@@ -169,7 +169,7 @@ class _SearchPageState extends State<SearchPage> {
                     child: CircularProgressIndicator(),
                   );
                 } else if (snapshot.connectionState == ConnectionState.done) {
-                  final List<Restaurant> restaurants = restaurantsParse(
+                  final List<RestaurantModel> restaurants = restaurantsParse(
                     snapshot.data,
                   );
 

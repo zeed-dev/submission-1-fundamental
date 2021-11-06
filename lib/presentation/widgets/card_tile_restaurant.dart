@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_store_app/common/constants.dart';
-import 'package:food_store_app/model/restaurant_model.dart';
+import 'package:food_store_app/data/model/restaurant_model.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:provider/provider.dart';
 
 class CardTileRestaurant extends StatelessWidget {
-  final Restaurant? restaurant;
+  final RestaurantModel? restaurant;
   final Function? onTap;
 
   CardTileRestaurant({

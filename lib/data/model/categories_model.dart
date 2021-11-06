@@ -1,11 +1,11 @@
-class Drink {
-  Drink({
+class CategoryModel {
+  CategoryModel({
     required this.name,
   });
 
-  String name;
+  final String name;
 
-  factory Drink.fromJson(Map<String, dynamic> json) => Drink(
+  factory CategoryModel.fromJson(Map<String, dynamic> json) => CategoryModel(
         name: json["name"],
       );
 

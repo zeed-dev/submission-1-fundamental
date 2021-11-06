@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_store_app/common/constants.dart';
-import 'package:food_store_app/model/restaurant_model.dart';
+import 'package:food_store_app/data/model/restaurant_model.dart';
 import 'package:food_store_app/presentation/pages/detail_page.dart';
 import 'package:food_store_app/presentation/pages/search_page.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            final List<Restaurant> restaurants = restaurantsParse(
+            final List<RestaurantModel> restaurants = restaurantsParse(
               snapshot.data,
             );
 
@@ -69,7 +69,7 @@ class HomePage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
-            final List<Restaurant> restaurants = restaurantsParse(
+            final List<RestaurantModel> restaurants = restaurantsParse(
               snapshot.data,
             );
             return Container(
