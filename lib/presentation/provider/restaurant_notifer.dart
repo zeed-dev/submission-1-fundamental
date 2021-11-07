@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:food_store_app/common/state_enum.dart';
 import 'package:food_store_app/domain/entities/restaurant.dart';
 import 'package:food_store_app/domain/usecases/get_restaurant.dart';
-import 'package:logger/logger.dart';
 
 class RestaurantNotifier extends ChangeNotifier {
   var _restaurant = <Restaurant>[];
@@ -19,8 +18,6 @@ class RestaurantNotifier extends ChangeNotifier {
   });
 
   final GetRestaurant getRestaurant;
-
-  // Logger _logger = Logger();
 
   Future<void> fetchRestaurant() async {
     _restaurantState = RequestState.Loading;

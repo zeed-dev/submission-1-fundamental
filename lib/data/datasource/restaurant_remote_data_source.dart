@@ -4,7 +4,6 @@ import 'package:food_store_app/common/exception.dart';
 import 'package:food_store_app/data/model/restaurant_model.dart';
 import 'package:food_store_app/data/model/restaurant_response.dart';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
 
 abstract class RestaurantRemoteDataSource {
   Future<List<RestaurantModel>> getRestaurant();

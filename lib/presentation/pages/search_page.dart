@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_store_app/common/constants.dart';
-import 'package:food_store_app/data/model/restaurant_model.dart';
 import 'package:food_store_app/domain/entities/restaurant.dart';
 import 'package:food_store_app/presentation/pages/detail_page.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
