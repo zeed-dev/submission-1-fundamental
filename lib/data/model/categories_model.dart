@@ -1,3 +1,5 @@
+import 'package:food_store_app/domain/entities/category.dart';
+
 class CategoryModel {
   CategoryModel({
     required this.name,
@@ -12,4 +14,6 @@ class CategoryModel {
   Map<String, dynamic> toJson() => {
         "name": name,
       };
+
+  Category toEntity() => Category(name: name);
 }

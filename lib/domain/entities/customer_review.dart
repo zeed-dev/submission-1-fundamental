@@ -1,7 +1,5 @@
-import 'package:food_store_app/domain/entities/customer_review.dart';
-
-class CustomerReviewModel {
-  CustomerReviewModel({
+class CustomerReview {
+  CustomerReview({
     required this.name,
     required this.review,
     required this.date,
@@ -11,8 +9,7 @@ class CustomerReviewModel {
   final String review;
   final String date;
 
-  factory CustomerReviewModel.fromJson(Map<String, dynamic> json) =>
-      CustomerReviewModel(
+  factory CustomerReview.fromJson(Map<String, dynamic> json) => CustomerReview(
         name: json["name"],
         review: json["review"],
         date: json["date"],
@@ -23,12 +20,4 @@ class CustomerReviewModel {
         "review": review,
         "date": date,
       };
-
-  CustomerReview toEntity() {
-    return CustomerReview(
-      name: name,
-      review: review,
-      date: date,
-    );
-  }
 }

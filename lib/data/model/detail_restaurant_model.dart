@@ -1,6 +1,32 @@
 import 'package:food_store_app/data/model/categories_model.dart';
 import 'package:food_store_app/data/model/custome_review_model.dart';
 import 'package:food_store_app/data/model/menu_model.dart';
+import 'package:food_store_app/domain/entities/restaurant_detail.dart';
+
+class RestaurantDetailResponse {
+  RestaurantDetailResponse({
+    required this.error,
+    required this.message,
+    required this.restaurant,
+  });
+
+  final bool error;
+  final String message;
+  final RestaurantDetailModel restaurant;
+
+  factory RestaurantDetailResponse.fromJson(Map<String, dynamic> json) =>
+      RestaurantDetailResponse(
+        error: json["error"],
+        message: json["message"],
+        restaurant: RestaurantDetailModel.fromJson(json["restaurant"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "error": error,
+        "message": message,
+        "restaurant": restaurant.toJson(),
+      };
+}
 
 class RestaurantDetailModel {
   RestaurantDetailModel({
@@ -56,4 +82,17 @@ class RestaurantDetailModel {
         "customerReviews":
             List<dynamic>.from(customerReviews.map((x) => x.toJson())),
       };
+
+  RestaurantDetail toEntity() => RestaurantDetail(
+        id: id,
+        name: name,
+        description: description,
+        city: city,
+        address: address,
+        pictureId: pictureId,
+        categories: categories.map((e) => e.toEntity()).toList(),
+        menus: menus.toEntity(),
+        rating: rating,
+        customerReviews: customerReviews.map((e) => e.toEntity()).toList(),
+      );
 }
