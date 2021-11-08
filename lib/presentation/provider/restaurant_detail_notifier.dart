@@ -13,9 +13,9 @@ class RestaurantDetailNotifier extends ChangeNotifier {
   String _message = '';
   String get message => _message;
 
-  GetRestaurantDetail getRestaurantDetail;
+  final GetRestaurantDetail getRestaurantDetail;
 
-  RestaurantDetailNotifier(this.getRestaurantDetail);
+  RestaurantDetailNotifier({required this.getRestaurantDetail});
 
   Future<void> fetchDetailRestaurant(String id) async {
     _restauranDetailtState = RequestState.Loading;

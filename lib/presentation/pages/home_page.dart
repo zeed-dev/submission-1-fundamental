@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.pushNamed(
                           context,
                           DetailPage.ROUTE_NAME,
-                          arguments: data.restaurant[index],
+                          arguments: data.restaurant[index].id,
                         );
                       },
                     ),

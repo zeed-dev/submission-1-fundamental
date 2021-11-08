@@ -6,15 +6,18 @@ import 'package:food_store_app/common/constants.dart';
 import 'package:food_store_app/data/model/drink_model.dart';
 import 'package:food_store_app/domain/entities/restaurant.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
+import 'package:food_store_app/presentation/provider/restaurant_detail_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class DetailPage extends StatefulWidget {
   static const ROUTE_NAME = "/detail-page";
   final Restaurant? restaurant;
+  final String id;
 
   DetailPage({
-    required this.restaurant,
+    this.restaurant,
+    required this.id,
   });
 
   @override
@@ -22,6 +25,14 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  @override
+  void initState() {
+    Future.microtask(() =>
+        Provider.of<RestaurantDetailNotifier>(context, listen: false)
+            .fetchDetailRestaurant(widget.id));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     BookmarkNotifer _bookmarkNotifer = Provider.of<BookmarkNotifer>(context);

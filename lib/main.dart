@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_store_app/domain/entities/restaurant.dart';
 import 'package:food_store_app/presentation/pages/detail_page.dart';
 import 'package:food_store_app/presentation/pages/main_page.dart';
 import 'package:food_store_app/presentation/pages/search_page.dart';
@@ -8,6 +7,7 @@ import 'package:food_store_app/presentation/pages/onboarding_page.dart';
 import 'package:food_store_app/presentation/pages/splash_page.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:food_store_app/presentation/provider/page_notifier.dart';
+import 'package:food_store_app/presentation/provider/restaurant_detail_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_notifer.dart';
 import 'package:provider/provider.dart';
 import 'injection.dart' as getIt;
@@ -30,6 +30,10 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => RestaurantNotifier(getRestaurant: getIt.getIt()),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              RestaurantDetailNotifier(getRestaurantDetail: getIt.getIt()),
         )
       ],
       child: MaterialApp(
@@ -44,10 +48,10 @@ class MyApp extends StatelessWidget {
             case OnboardingPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => OnboardingPage());
             case DetailPage.ROUTE_NAME:
-              final restaurant = settings.arguments as Restaurant;
+              final id = settings.arguments as String;
               return CupertinoPageRoute(
                 builder: (_) => DetailPage(
-                  restaurant: restaurant,
+                  id: id,
                 ),
               );
             case SearchPage.ROUTE_NAME:
