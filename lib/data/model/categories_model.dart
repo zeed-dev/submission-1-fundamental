@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:food_store_app/domain/entities/category.dart';
 
-class CategoryModel {
+class CategoryModel extends Equatable {
   CategoryModel({
     required this.name,
   });
@@ -16,4 +17,7 @@ class CategoryModel {
       };
 
   Category toEntity() => Category(name: name);
+
+  @override
+  List<Object?> get props => [name];
 }

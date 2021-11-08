@@ -1,4 +1,6 @@
-class Restaurant {
+import 'package:equatable/equatable.dart';
+
+class Restaurant extends Equatable {
   Restaurant({
     required this.id,
     required this.name,
@@ -8,12 +10,12 @@ class Restaurant {
     required this.rating,
   });
 
-  String id;
-  String name;
-  String description;
-  String pictureId;
-  String city;
-  double rating;
+  final String id;
+  final String name;
+  final String description;
+  final String pictureId;
+  final String city;
+  final double rating;
 
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
         id: json["id"],
@@ -32,4 +34,14 @@ class Restaurant {
         "city": city,
         "rating": rating,
       };
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        description,
+        pictureId,
+        city,
+        rating,
+      ];
 }

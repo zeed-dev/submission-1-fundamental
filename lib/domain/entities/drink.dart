@@ -1,9 +1,11 @@
-class Drink {
+import 'package:equatable/equatable.dart';
+
+class Drink extends Equatable {
   Drink({
     required this.name,
   });
 
-  String name;
+  final String name;
 
   factory Drink.fromJson(Map<String, dynamic> json) => Drink(
         name: json["name"],
@@ -12,4 +14,7 @@ class Drink {
   Map<String, dynamic> toJson() => {
         "name": name,
       };
+
+  @override
+  List<Object?> get props => [name];
 }

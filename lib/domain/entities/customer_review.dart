@@ -1,4 +1,6 @@
-class CustomerReview {
+import 'package:equatable/equatable.dart';
+
+class CustomerReview extends Equatable {
   CustomerReview({
     required this.name,
     required this.review,
@@ -20,4 +22,11 @@ class CustomerReview {
         "review": review,
         "date": date,
       };
+
+  @override
+  List<Object?> get props => [
+        name,
+        review,
+        date,
+      ];
 }

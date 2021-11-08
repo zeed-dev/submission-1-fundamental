@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:food_store_app/data/model/categories_model.dart';
 import 'package:food_store_app/data/model/custome_review_model.dart';
 import 'package:food_store_app/data/model/menu_model.dart';
 import 'package:food_store_app/domain/entities/restaurant_detail.dart';
 
-class RestaurantDetailResponse {
+class RestaurantDetailResponse extends Equatable {
   RestaurantDetailResponse({
     required this.error,
     required this.message,
@@ -26,9 +27,16 @@ class RestaurantDetailResponse {
         "message": message,
         "restaurant": restaurant.toJson(),
       };
+
+  @override
+  List<Object?> get props => [
+        error,
+        message,
+        restaurant,
+      ];
 }
 
-class RestaurantDetailModel {
+class RestaurantDetailModel extends Equatable {
   RestaurantDetailModel({
     required this.id,
     required this.name,
@@ -95,4 +103,18 @@ class RestaurantDetailModel {
         rating: rating,
         customerReviews: customerReviews.map((e) => e.toEntity()).toList(),
       );
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        description,
+        city,
+        address,
+        pictureId,
+        categories,
+        menus,
+        rating,
+        customerReviews,
+      ];
 }

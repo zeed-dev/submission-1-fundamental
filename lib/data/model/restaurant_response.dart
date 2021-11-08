@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:food_store_app/data/model/restaurant_model.dart';
 
-class RestaurantResponse {
+class RestaurantResponse extends Equatable {
   RestaurantResponse({
     required this.error,
     required this.message,
@@ -28,4 +29,12 @@ class RestaurantResponse {
         "count": count,
         "restaurants": List<dynamic>.from(restaurants!.map((x) => x.toJson())),
       };
+
+  @override
+  List<Object?> get props => [
+        error,
+        message,
+        count,
+        restaurants,
+      ];
 }

@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:food_store_app/domain/entities/customer_review.dart';
 
-class CustomerReviewModel {
+class CustomerReviewModel extends Equatable {
   CustomerReviewModel({
     required this.name,
     required this.review,
@@ -31,4 +32,11 @@ class CustomerReviewModel {
       date: date,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        name,
+        review,
+        date,
+      ];
 }

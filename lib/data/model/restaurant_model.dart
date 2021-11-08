@@ -1,8 +1,9 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:food_store_app/domain/entities/restaurant.dart';
 
-class RestaurantModel {
+class RestaurantModel extends Equatable {
   RestaurantModel({
     required this.id,
     required this.name,
@@ -12,12 +13,12 @@ class RestaurantModel {
     required this.rating,
   });
 
-  String id;
-  String name;
-  String description;
-  String pictureId;
-  String city;
-  double rating;
+  final String id;
+  final String name;
+  final String description;
+  final String pictureId;
+  final String city;
+  final double rating;
 
   factory RestaurantModel.fromJson(Map<String, dynamic> json) =>
       RestaurantModel(
@@ -46,6 +47,16 @@ class RestaurantModel {
         city: city,
         rating: rating,
       );
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        description,
+        pictureId,
+        city,
+        rating,
+      ];
 }
 
 List<Restaurant> restaurantsParse(String? data) {

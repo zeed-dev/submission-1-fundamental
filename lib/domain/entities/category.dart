@@ -1,4 +1,6 @@
-class Category {
+import 'package:equatable/equatable.dart';
+
+class Category extends Equatable {
   Category({
     required this.name,
   });
@@ -12,4 +14,7 @@ class Category {
   Map<String, dynamic> toJson() => {
         "name": name,
       };
+
+  @override
+  List<Object?> get props => [name];
 }

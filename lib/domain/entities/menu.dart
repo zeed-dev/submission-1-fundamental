@@ -1,13 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:food_store_app/domain/entities/drink.dart';
 
-class Menus {
+class Menus extends Equatable {
   Menus({
     required this.foods,
     required this.drinks,
   });
 
-  List<Drink> foods;
-  List<Drink> drinks;
+  final List<Drink> foods;
+  final List<Drink> drinks;
 
   factory Menus.fromJson(Map<String, dynamic> json) => Menus(
         foods: List<Drink>.from(json["foods"].map((x) => Drink.fromJson(x))),
@@ -18,4 +19,10 @@ class Menus {
         "foods": List<dynamic>.from(foods.map((x) => x.toJson())),
         "drinks": List<dynamic>.from(drinks.map((x) => x.toJson())),
       };
+
+  @override
+  List<Object?> get props => [
+        foods,
+        drinks,
+      ];
 }

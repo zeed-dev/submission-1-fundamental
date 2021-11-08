@@ -1,8 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:food_store_app/domain/entities/category.dart';
 import 'package:food_store_app/domain/entities/customer_review.dart';
 import 'package:food_store_app/domain/entities/menu.dart';
 
-class RestaurantDetail {
+class RestaurantDetail extends Equatable {
   RestaurantDetail({
     required this.id,
     required this.name,
@@ -56,4 +57,18 @@ class RestaurantDetail {
         "customerReviews":
             List<dynamic>.from(customerReviews.map((x) => x.toJson())),
       };
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        description,
+        city,
+        address,
+        pictureId,
+        categories,
+        menus,
+        rating,
+        customerReviews,
+      ];
 }
