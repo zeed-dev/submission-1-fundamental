@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           } else {
-            return Text(data.message);
+            return Center(child: Text(data.message));
           }
         },
       );
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           } else {
-            return Text(restaurant.message);
+            return Center(child: Text(restaurant.message));
           }
         },
       );

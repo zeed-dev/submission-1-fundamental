@@ -30,12 +30,6 @@ class _DetailPageState extends State<DetailPage> {
   TextEditingController reviewController = TextEditingController();
   bool isLoading = false;
 
-  setIsLoading(bool value) {
-    setState(() {
-      isLoading = value;
-    });
-  }
-
   @override
   void initState() {
     Future.microtask(() =>
@@ -180,7 +174,7 @@ class _DetailPageState extends State<DetailPage> {
                   width: 8,
                 ),
                 SizedBox(
-                  width: 15,
+                  width: 20,
                 ),
                 Expanded(
                   child: Column(
@@ -205,29 +199,35 @@ class _DetailPageState extends State<DetailPage> {
     }
 
     Widget _buildTextField() {
-      return Column(
-        children: [
-          TextField(
-            controller: nameController,
-            decoration: InputDecoration(
-              hintText: "Name",
-              border: OutlineInputBorder(),
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: margin, vertical: 10),
+        child: Column(
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(
+                hintText: "Name",
+                border: OutlineInputBorder(),
+              ),
             ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextField(
-            controller: reviewController,
-            decoration: InputDecoration(
-              hintText: "Add Review's",
-              border: OutlineInputBorder(),
+            SizedBox(
+              height: 10,
             ),
-            textInputAction: TextInputAction.newline,
-            minLines: 2,
-            maxLines: 2,
-          ),
-        ],
+            TextField(
+              controller: reviewController,
+              decoration: InputDecoration(
+                hintText: "Add Review's",
+                border: OutlineInputBorder(),
+              ),
+              textInputAction: TextInputAction.newline,
+              minLines: 2,
+              maxLines: 2,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+          ],
+        ),
       );
     }
 
@@ -285,49 +285,30 @@ class _DetailPageState extends State<DetailPage> {
                 showPlatformDialog(
                   context: context,
                   builder: (context) => BasicDialogAlert(
-                    title: Text("Review's"),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Review's"),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            size: 20,
+                          ),
+                        ),
+                      ],
+                    ),
                     content: Container(
                       height: 300,
-                      child: _buildTextField(),
+                      width: 300,
+                      child: ListView(
+                        children: [
+                          _buildReviewItems(restaurant.customerReviews)
+                        ],
+                      ),
                     ),
-                    actions: [
-                      isLoading
-                          ? CircularProgressIndicator()
-                          : BasicDialogAction(
-                              title: Text("Add"),
-                              onPressed: () async {
-                                setIsLoading(true);
-                                await Provider.of<RestaurantDetailNotifier>(
-                                  context,
-                                  listen: false,
-                                )
-                                    .postAddReview(
-                                  reviewController.text,
-                                  nameController.text,
-                                  restaurant.id,
-                                )
-                                    .then(
-                                  (value) {
-                                    setIsLoading(false);
-                                    Future.microtask(
-                                      () =>
-                                          Provider.of<RestaurantDetailNotifier>(
-                                        context,
-                                        listen: false,
-                                      ).fetchDetailRestaurant(widget.id),
-                                    );
-                                    _clearController();
-                                    Navigator.pop(context);
-                                    Flushbar(
-                                      message: "Add Successfully",
-                                      duration: Duration(seconds: 2),
-                                      backgroundColor: Colors.green,
-                                    ).show(context);
-                                  },
-                                );
-                              },
-                            ),
-                    ],
                   ),
                 );
               },
@@ -339,7 +320,7 @@ class _DetailPageState extends State<DetailPage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
-                  Icons.add_comment,
+                  Icons.comment,
                   color: kGrey,
                 ),
               ),
@@ -561,14 +542,83 @@ class _DetailPageState extends State<DetailPage> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: margin),
                         child: Text(
-                          "Review's",
+                          "Add Review's",
                           style: kHeading6.copyWith(
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
-                      _buildReviewItems(
-                        restaurant.restaurantDetail.customerReviews,
+                      _buildTextField(),
+                      isLoading
+                          ? Center(child: CircularProgressIndicator())
+                          : InkWell(
+                              onTap: () async {
+                                setState(() {
+                                  isLoading = true;
+                                });
+
+                                if (nameController.text.isEmpty ||
+                                    reviewController.text.isEmpty) {
+                                  Flushbar(
+                                    message: "Field cannot be empty",
+                                    duration: Duration(seconds: 2),
+                                    backgroundColor: Colors.red,
+                                  ).show(context);
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                } else {
+                                  await Provider.of<RestaurantDetailNotifier>(
+                                    context,
+                                    listen: false,
+                                  ).postAddReview(
+                                    reviewController.text,
+                                    nameController.text,
+                                    restaurant.restaurantDetail.id,
+                                  );
+
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+
+                                  Future.microtask(
+                                    () => Provider.of<RestaurantDetailNotifier>(
+                                      context,
+                                      listen: false,
+                                    ).fetchDetailRestaurant(widget.id),
+                                  );
+
+                                  _clearController();
+
+                                  Flushbar(
+                                    message: "Add Successfully",
+                                    duration: Duration(seconds: 2),
+                                    backgroundColor: Colors.green,
+                                  ).show(context);
+                                }
+                              },
+                              child: Container(
+                                height: 48,
+                                margin:
+                                    EdgeInsets.symmetric(horizontal: margin),
+                                decoration: BoxDecoration(
+                                  color: KBlueSecondary,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Add Review",
+                                    style: kHeading6.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color: kWhite,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                      SizedBox(
+                        height: 10,
                       )
                     ],
                   ),
@@ -579,7 +629,7 @@ class _DetailPageState extends State<DetailPage> {
         } else {
           return Scaffold(
             body: Center(
-              child: Text(restaurant.message),
+              child: Center(child: Text(restaurant.message)),
             ),
           );
         }
