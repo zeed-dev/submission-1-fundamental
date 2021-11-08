@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_store_app/common/constants.dart';
-import 'package:food_store_app/domain/entities/restaurant.dart';
+import 'package:food_store_app/common/state_enum.dart';
 import 'package:food_store_app/presentation/pages/detail_page.dart';
-import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
-import 'package:food_store_app/presentation/widgets/card_restaruant.dart';
+import 'package:food_store_app/presentation/provider/search_restaurant_notifier.dart';
+import 'package:food_store_app/presentation/widgets/card_tile_restaurant.dart';
+import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   static const ROUTE_NAME = "/serach-page";
@@ -15,31 +17,14 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  bool isSearch = false;
-  List<Restaurant> _dataList = [];
-  String _query = "";
-
-  List<Restaurant> _filterListData() {
-    List<Restaurant> _filterList = [];
-
-    for (var i = 0; i < _dataList.length; i++) {
-      var _data = _dataList[i];
-      if (_data.name.toLowerCase().contains(_query.toLowerCase())) {
-        _filterList.add(_data);
-      }
-    }
-
-    return _filterList;
-  }
+  Logger _logger = Logger();
 
   Widget _buildDataNotFound() {
-    return SingleChildScrollView(
-      child: Center(
-        child: LottieBuilder.asset(
-          "assets/trash.json",
-          width: 200,
-          height: 200,
-        ),
+    return Center(
+      child: LottieBuilder.asset(
+        "assets/trash.json",
+        width: 200,
+        height: 200,
       ),
     );
   }
@@ -48,18 +33,10 @@ class _SearchPageState extends State<SearchPage> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: margin),
       child: TextField(
-        onChanged: (query) {
-          if (query.isEmpty) {
-            setState(() {
-              isSearch = false;
-              _query = "";
-            });
-          } else {
-            setState(() {
-              isSearch = true;
-              _query = query;
-            });
-          }
+        onSubmitted: (query) {
+          _logger.d(query);
+          Provider.of<SearechRestaurantNotifier>(context, listen: false)
+              .fetchSearchRestaurant(query);
         },
         decoration: InputDecoration(
           hintText: "Search Restaurant",
@@ -71,54 +48,47 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildSeraching({
-    required BuildContext context,
-    required BookmarkNotifer bookmarkNotifer,
-  }) {
-    var _dataRestaurant = _filterListData();
-    return _filterListData().isEmpty
-        ? _buildDataNotFound()
-        : Expanded(
-            child: ListView.builder(
-              itemCount: _dataRestaurant.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: margin,
-                    vertical: 10,
-                  ),
-                  child: CardRestaurant(
-                    restaurant: _dataRestaurant[index],
+  _buildSearchResult() {
+    return Consumer<SearechRestaurantNotifier>(
+      builder: (context, restaurant, child) {
+        if (restaurant.serachState == RequestState.Loading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (restaurant.serachState == RequestState.Loaded) {
+          if (restaurant.serach.isEmpty) {
+            return Expanded(
+              child: Container(
+                child: _buildDataNotFound(),
+              ),
+            );
+          } else {
+            return Expanded(
+              child: ListView.builder(
+                itemCount: restaurant.serach.length,
+                itemBuilder: (context, index) {
+                  return CardTileRestaurant(
+                    restaurant: restaurant.serach[index],
                     onTap: () {
                       Navigator.pushNamed(
                         context,
                         DetailPage.ROUTE_NAME,
-                        arguments: _dataRestaurant[index],
+                        arguments: restaurant.serach[index].id,
                       );
                     },
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+            );
+          }
+        } else {
+          return Center(
+            child: Text(restaurant.message),
           );
+        }
+      },
+    );
   }
-
-  @override
-  void initState() {
-    // getDataRestaurant();
-    super.initState();
-  }
-
-  // Future<void> getDataRestaurant() async {
-  //   var data = await DefaultAssetBundle.of(context).loadString(
-  //     "assets/data.json",
-  //   );
-  //   final List<Restaurant> restaurants = restaurantsParse(data);
-
-  //   for (var item in restaurants) {
-  //     _dataList.add(item);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -153,58 +123,14 @@ class _SearchPageState extends State<SearchPage> {
             SizedBox(
               height: 10,
             ),
-            // FutureBuilder<String>(
-            //   future: DefaultAssetBundle.of(context).loadString(
-            //     "assets/data.json",
-            //   ),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.connectionState == ConnectionState.waiting) {
-            //       return Center(
-            //         child: CircularProgressIndicator(),
-            //       );
-            //     } else if (snapshot.connectionState == ConnectionState.done) {
-            //       final List<RestaurantModel> restaurants = restaurantsParse(
-            //         snapshot.data,
-            //       );
-
-            //       return isSearch
-            //           ? _buildSeraching(
-            //               context: context,
-            //               bookmarkNotifer: _bookmarkNotifer,
-            //             )
-            //           : Expanded(
-            //               child: ListView.builder(
-            //                 itemCount: 10,
-            //                 itemBuilder: (context, index) {
-            //                   return Padding(
-            //                     padding: EdgeInsets.symmetric(
-            //                       horizontal: margin,
-            //                       vertical: 10,
-            //                     ),
-            //                     child: CardRestaurant(
-            //                       isBookmark: _bookmarkNotifer.isBookmark(
-            //                         restaurants[index],
-            //                       ),
-            //                       restaurant: restaurants[index],
-            //                       onTap: () {
-            //                         Navigator.pushNamed(
-            //                           context,
-            //                           DetailPage.ROUTE_NAME,
-            //                           arguments: restaurants[index],
-            //                         );
-            //                       },
-            //                     ),
-            //                   );
-            //                 },
-            //               ),
-            //             );
-            //     } else {
-            //       return Center(
-            //         child: Text("Opps something worng!"),
-            //       );
-            //     }
-            //   },
-            // )
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: margin),
+              child: Text(
+                "Search Result",
+                style: kSubtitle,
+              ),
+            ),
+            _buildSearchResult(),
           ],
         ),
       ),

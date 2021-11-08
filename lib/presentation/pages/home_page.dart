@@ -3,7 +3,6 @@ import 'package:food_store_app/common/constants.dart';
 import 'package:food_store_app/common/state_enum.dart';
 import 'package:food_store_app/presentation/pages/detail_page.dart';
 import 'package:food_store_app/presentation/pages/search_page.dart';
-import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_notifer.dart';
 import 'package:food_store_app/presentation/widgets/card_restaruant.dart';
 import 'package:food_store_app/presentation/widgets/card_tile_restaurant.dart';

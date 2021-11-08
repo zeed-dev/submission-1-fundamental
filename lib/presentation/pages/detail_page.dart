@@ -1,10 +1,11 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dialogs/flutter_dialogs.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_store_app/common/constants.dart';
 import 'package:food_store_app/common/state_enum.dart';
-import 'package:food_store_app/data/model/drink_model.dart';
+import 'package:food_store_app/domain/entities/customer_review.dart';
 import 'package:food_store_app/domain/entities/drink.dart';
 import 'package:food_store_app/domain/entities/restaurant_detail.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
@@ -150,6 +151,57 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
+    Widget _buildReviewItems(List<CustomerReview> data) {
+      return Padding(
+        padding: EdgeInsets.symmetric(horizontal: margin),
+        child: Column(
+            children: data.map((e) {
+          return Padding(
+            padding: EdgeInsets.only(top: 10),
+            child: Row(
+              children: [
+                Image.asset(
+                  "assets/ellipse.png",
+                  width: 8,
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        e.name,
+                        style: kSubtitle.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        e.review,
+                        style: kSubtitle,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        }).toList()),
+      );
+    }
+
+    Widget _buildTextField() {
+      return TextField(
+        onSubmitted: (query) {},
+        decoration: InputDecoration(
+          hintText: "Add Review's",
+          border: OutlineInputBorder(),
+        ),
+        textInputAction: TextInputAction.newline,
+        minLines: 5,
+        maxLines: 5,
+      );
+    }
+
     Widget _customBottomNavbarDetail(RestaurantDetail restaurant) {
       return Container(
         height: 70,
@@ -192,6 +244,43 @@ class _DetailPageState extends State<DetailPage> {
                   _bookmarkNotifer.isBookmark(restaurant)
                       ? Icons.bookmark
                       : Icons.bookmark_outline,
+                  color: kGrey,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 16,
+            ),
+            InkWell(
+              onTap: () {
+                showPlatformDialog(
+                  context: context,
+                  builder: (context) => BasicDialogAlert(
+                    title: Text("Review's"),
+                    content: Container(
+                      height: 100,
+                      child: _buildTextField(),
+                    ),
+                    actions: [
+                      BasicDialogAction(
+                        title: Text("Add"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+              child: Container(
+                width: 59,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  Icons.add_comment,
                   color: kGrey,
                 ),
               ),
@@ -409,6 +498,18 @@ class _DetailPageState extends State<DetailPage> {
                       _buildMenuItems(restaurant.restaurantDetail.menus.drinks),
                       SizedBox(
                         height: 10,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: margin),
+                        child: Text(
+                          "Review's",
+                          style: kHeading6.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      _buildReviewItems(
+                        restaurant.restaurantDetail.customerReviews,
                       )
                     ],
                   ),

@@ -20,7 +20,7 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
     try {
       final result = await restaurantRemoteDataSource.getRestaurant();
 
-      return Right(result.map((e) => e.toEntity()).toList());
+      return Right(result!.map((e) => e.toEntity()).toList());
     } on ServerException {
       return Left(ServerFailure(''));
     } on SocketException {
@@ -36,6 +36,21 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
       final result = await restaurantRemoteDataSource.getDetailRestaurant(id);
 
       return Right(result.toEntity());
+    } on ServerException {
+      return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Restaurant>>> searchRestaurant(
+    String query,
+  ) async {
+    try {
+      final result = await restaurantRemoteDataSource.searchRestaurant(query);
+
+      return Right(result!.map((e) => e.toEntity()).toList());
     } on ServerException {
       return Left(ServerFailure(''));
     } on SocketException {

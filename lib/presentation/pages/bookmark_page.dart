@@ -5,7 +5,6 @@ import 'package:food_store_app/common/constants.dart';
 import 'package:food_store_app/domain/entities/restaurant_detail.dart';
 import 'package:food_store_app/presentation/pages/detail_page.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
-import 'package:food_store_app/presentation/widgets/card_restaruant.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 

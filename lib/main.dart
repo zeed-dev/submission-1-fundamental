@@ -9,6 +9,7 @@ import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:food_store_app/presentation/provider/page_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_detail_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_notifer.dart';
+import 'package:food_store_app/presentation/provider/search_restaurant_notifier.dart';
 import 'package:provider/provider.dart';
 import 'injection.dart' as getIt;
 
@@ -34,7 +35,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) =>
               RestaurantDetailNotifier(getRestaurantDetail: getIt.getIt()),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SearechRestaurantNotifier(serachRestaurant: getIt.getIt()),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

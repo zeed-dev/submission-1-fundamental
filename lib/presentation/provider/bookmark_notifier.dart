@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:food_store_app/domain/entities/restaurant.dart';
 import 'package:food_store_app/domain/entities/restaurant_detail.dart';
 
 class BookmarkNotifer extends ChangeNotifier {

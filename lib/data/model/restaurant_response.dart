@@ -8,10 +8,10 @@ class RestaurantResponse {
     required this.restaurants,
   });
 
-  final bool error;
-  final String message;
-  final int count;
-  final List<RestaurantModel> restaurants;
+  final bool? error;
+  final String? message;
+  final int? count;
+  final List<RestaurantModel>? restaurants;
 
   factory RestaurantResponse.fromJson(Map<String, dynamic> json) =>
       RestaurantResponse(
@@ -26,6 +26,6 @@ class RestaurantResponse {
         "error": error,
         "message": message,
         "count": count,
-        "restaurants": List<dynamic>.from(restaurants.map((x) => x.toJson())),
+        "restaurants": List<dynamic>.from(restaurants!.map((x) => x.toJson())),
       };
 }
