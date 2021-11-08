@@ -3,8 +3,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_store_app/common/constants.dart';
+import 'package:food_store_app/common/state_enum.dart';
 import 'package:food_store_app/data/model/drink_model.dart';
-import 'package:food_store_app/domain/entities/restaurant.dart';
+import 'package:food_store_app/domain/entities/drink.dart';
+import 'package:food_store_app/domain/entities/restaurant_detail.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_detail_notifier.dart';
 import 'package:provider/provider.dart';
@@ -12,11 +14,9 @@ import 'package:share/share.dart';
 
 class DetailPage extends StatefulWidget {
   static const ROUTE_NAME = "/detail-page";
-  final Restaurant? restaurant;
   final String id;
 
   DetailPage({
-    this.restaurant,
     required this.id,
   });
 
@@ -37,7 +37,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     BookmarkNotifer _bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
 
-    Widget _buildHeader() {
+    Widget _buildHeader(RestaurantDetail restaurant) {
       return Container(
         margin: EdgeInsets.only(bottom: 10),
         height: 256,
@@ -48,7 +48,7 @@ class _DetailPageState extends State<DetailPage> {
               height: 230,
               width: double.infinity,
               child: CachedNetworkImage(
-                imageUrl: widget.restaurant!.pictureId,
+                imageUrl: "$IMAGE_BASE_URL${restaurant.pictureId}",
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Center(
                   child: CircularProgressIndicator(),
@@ -79,7 +79,7 @@ class _DetailPageState extends State<DetailPage> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: CachedNetworkImage(
-                    imageUrl: widget.restaurant!.pictureId,
+                    imageUrl: "$IMAGE_BASE_URL${restaurant.pictureId}",
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Center(
                       child: CircularProgressIndicator(),
@@ -110,7 +110,7 @@ class _DetailPageState extends State<DetailPage> {
                   IconButton(
                     onPressed: () {
                       Share.share(
-                        "${widget.restaurant!.pictureId} \n\n${widget.restaurant!.name}\n\nRating: ${widget.restaurant!.rating} - ${widget.restaurant!.city} \n\n${widget.restaurant!.description}",
+                        "$IMAGE_BASE_URL${restaurant.pictureId} \n\n${restaurant.name}\n\nRating: ${restaurant.rating} - ${restaurant.city} \n\n${restaurant.description}",
                       );
                     },
                     icon: Icon(
@@ -126,7 +126,7 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
-    Widget _buildMenuItems(List<DrinkModel> data) {
+    Widget _buildMenuItems(List<Drink> data) {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: margin),
         child: Column(
@@ -150,7 +150,7 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
-    Widget _customBottomNavbarDetail() {
+    Widget _customBottomNavbarDetail(RestaurantDetail restaurant) {
       return Container(
         height: 70,
         width: double.infinity,
@@ -170,16 +170,15 @@ class _DetailPageState extends State<DetailPage> {
           children: [
             InkWell(
               onTap: () {
-                _bookmarkNotifer.setRestaurant(widget.restaurant!);
+                _bookmarkNotifer.setRestaurant(restaurant);
                 Flushbar(
-                  message: _bookmarkNotifer.isBookmark(widget.restaurant!)
+                  message: _bookmarkNotifer.isBookmark(restaurant)
                       ? "Has been added to the Wishlist"
                       : "Has been removed from the Wishlist",
                   duration: Duration(seconds: 3),
-                  backgroundColor:
-                      _bookmarkNotifer.isBookmark(widget.restaurant!)
-                          ? Colors.blue
-                          : Colors.red,
+                  backgroundColor: _bookmarkNotifer.isBookmark(restaurant)
+                      ? Colors.blue
+                      : Colors.red,
                 ).show(context);
               },
               child: Container(
@@ -190,7 +189,7 @@ class _DetailPageState extends State<DetailPage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
-                  _bookmarkNotifer.isBookmark(widget.restaurant!)
+                  _bookmarkNotifer.isBookmark(restaurant)
                       ? Icons.bookmark
                       : Icons.bookmark_outline,
                   color: kGrey,
@@ -233,13 +232,13 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
-    Widget _customSliverAppBar(bool isScrolled) {
+    Widget _customSliverAppBar(bool isScrolled, RestaurantDetail restaurant) {
       return SliverAppBar(
         pinned: true,
         expandedHeight: 256,
         title: isScrolled
             ? Text(
-                widget.restaurant!.name,
+                restaurant.name,
                 style: kHeading6.copyWith(
                   color: kBlack,
                 ),
@@ -261,7 +260,7 @@ class _DetailPageState extends State<DetailPage> {
               ? IconButton(
                   onPressed: () {
                     Share.share(
-                      "${widget.restaurant!.pictureId} \n\n${widget.restaurant!.name}\n\nRating: ${widget.restaurant!.rating} - ${widget.restaurant!.city} \n\n${widget.restaurant!.description}",
+                      "${restaurant.pictureId} \n\n${restaurant.name}\n\nRating: ${restaurant.rating} - ${restaurant.city} \n\n${restaurant.description}",
                     );
                   },
                   icon: Icon(
@@ -273,139 +272,158 @@ class _DetailPageState extends State<DetailPage> {
         ],
         backgroundColor: kWhite,
         flexibleSpace: FlexibleSpaceBar(
-          background: _buildHeader(),
+          background: _buildHeader(restaurant),
         ),
       );
     }
 
-    return Scaffold(
-      bottomNavigationBar: _customBottomNavbarDetail(),
-      body: NestedScrollView(
-        headerSliverBuilder: (context, isScrolled) {
-          return [
-            _customSliverAppBar(isScrolled),
-          ];
-        },
-        body: SingleChildScrollView(
-          child: Container(
-            color: kWhite,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Text(
-                    widget.restaurant!.name,
-                    style: kHeading5,
-                  ),
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.location_pin,
-                      color: kGrey,
-                    ),
-                    Text(
-                      widget.restaurant!.city,
-                      style: kSubtitle,
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    RatingBarIndicator(
-                      rating: widget.restaurant!.rating,
-                      itemCount: 5,
-                      itemBuilder: (context, index) => Icon(
-                        Icons.star,
-                        color: Color(0xFFffc300),
-                      ),
-                      itemSize: 24,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      widget.restaurant!.rating.toString(),
-                      style: kSubtitle,
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 17,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: margin),
-                  child: Divider(
-                    thickness: 1,
-                  ),
-                ),
-                SizedBox(
-                  height: 24,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: margin),
-                  child: Text(
-                    "Description",
-                    style: kHeading6.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: margin),
-                  child: Text(
-                    widget.restaurant!.description,
-                    style: kBodyText,
-                  ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: margin),
-                  child: Text(
-                    "Food",
-                    style: kHeading6.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 11,
-                ),
-                // _buildMenuItems(widget.restaurant!.menus.foods),
-                SizedBox(
-                  height: 16,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: margin),
-                  child: Text(
-                    "Drink",
-                    style: kHeading6.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 11,
-                ),
-                // _buildMenuItems(widget.restaurant!.menus.drinks),
-                SizedBox(
-                  height: 10,
-                )
-              ],
+    return Consumer<RestaurantDetailNotifier>(
+      builder: (context, restaurant, child) {
+        if (restaurant.restaurantDetailState == RequestState.Loading) {
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
-          ),
-        ),
-      ),
+          );
+        } else if (restaurant.restaurantDetailState == RequestState.Loaded) {
+          return Scaffold(
+            bottomNavigationBar:
+                _customBottomNavbarDetail(restaurant.restaurantDetail),
+            body: NestedScrollView(
+              headerSliverBuilder: (context, isScrolled) {
+                return [
+                  _customSliverAppBar(isScrolled, restaurant.restaurantDetail),
+                ];
+              },
+              body: SingleChildScrollView(
+                child: Container(
+                  color: kWhite,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Text(
+                          restaurant.restaurantDetail.name,
+                          style: kHeading5,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.location_pin,
+                            color: kGrey,
+                          ),
+                          Text(
+                            restaurant.restaurantDetail.city,
+                            style: kSubtitle,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RatingBarIndicator(
+                            rating: restaurant.restaurantDetail.rating,
+                            itemCount: 5,
+                            itemBuilder: (context, index) => Icon(
+                              Icons.star,
+                              color: Color(0xFFffc300),
+                            ),
+                            itemSize: 24,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            restaurant.restaurantDetail.rating.toString(),
+                            style: kSubtitle,
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 17,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: margin),
+                        child: Divider(
+                          thickness: 1,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: margin),
+                        child: Text(
+                          "Description",
+                          style: kHeading6.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: margin),
+                        child: Text(
+                          restaurant.restaurantDetail.description,
+                          style: kBodyText,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: margin),
+                        child: Text(
+                          "Food",
+                          style: kHeading6.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 11,
+                      ),
+                      _buildMenuItems(restaurant.restaurantDetail.menus.foods),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: margin),
+                        child: Text(
+                          "Drink",
+                          style: kHeading6.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 11,
+                      ),
+                      _buildMenuItems(restaurant.restaurantDetail.menus.drinks),
+                      SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else {
+          return Scaffold(
+            body: Center(
+              child: Text(restaurant.message),
+            ),
+          );
+        }
+      },
     );
   }
 }

@@ -1,17 +1,18 @@
 import 'package:flutter/widgets.dart';
 import 'package:food_store_app/domain/entities/restaurant.dart';
+import 'package:food_store_app/domain/entities/restaurant_detail.dart';
 
 class BookmarkNotifer extends ChangeNotifier {
-  List<Restaurant> _bookmark = [];
+  List<RestaurantDetail> _bookmark = [];
 
-  List<Restaurant> get bookmark => _bookmark;
+  List<RestaurantDetail> get bookmark => _bookmark;
 
-  set bookmark(List<Restaurant> bookmark) {
+  set bookmark(List<RestaurantDetail> bookmark) {
     _bookmark = bookmark;
     notifyListeners();
   }
 
-  setRestaurant(Restaurant restaurant) {
+  setRestaurant(RestaurantDetail restaurant) {
     if (!isBookmark(restaurant)) {
       _bookmark.add(restaurant);
     } else {
@@ -20,7 +21,7 @@ class BookmarkNotifer extends ChangeNotifier {
     notifyListeners();
   }
 
-  isBookmark(Restaurant restaurant) {
+  isBookmark(RestaurantDetail restaurant) {
     var index = _bookmark.indexWhere((element) => element.id == restaurant.id);
 
     if (index == -1) {

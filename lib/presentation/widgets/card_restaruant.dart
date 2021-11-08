@@ -7,12 +7,10 @@ import 'package:food_store_app/domain/entities/restaurant.dart';
 class CardRestaurant extends StatelessWidget {
   final Restaurant? restaurant;
   final Function? onTap;
-  final bool? isBookmark;
 
   CardRestaurant({
     required this.restaurant,
     required this.onTap,
-    required this.isBookmark,
   });
 
   @override
@@ -36,26 +34,18 @@ class CardRestaurant extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
-                    height: 46,
-                    width: 46,
-                    imageUrl: "$IMAGE_BASE_URL${restaurant!.pictureId}",
-                    placeholder: (context, url) => Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                    fit: BoxFit.cover,
-                  ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: CachedNetworkImage(
+                height: 46,
+                width: 46,
+                imageUrl: "$IMAGE_BASE_URL${restaurant!.pictureId}",
+                placeholder: (context, url) => Center(
+                  child: CircularProgressIndicator(),
                 ),
-                Icon(
-                  isBookmark! ? Icons.bookmark : Icons.bookmark_border_outlined,
-                ),
-              ],
+                errorWidget: (context, url, error) => Icon(Icons.error),
+                fit: BoxFit.cover,
+              ),
             ),
             SizedBox(
               height: 6,

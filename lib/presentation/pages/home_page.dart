@@ -30,8 +30,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    BookmarkNotifer bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
-
     Widget _buildRecomendedRestaurant() {
       return Consumer<RestaurantNotifier>(
         builder: (context, data, child) {
@@ -53,9 +51,6 @@ class _HomePageState extends State<HomePage> {
                       right: index == 3 ? 0 : margin,
                     ),
                     child: CardRestaurant(
-                      isBookmark: bookmarkNotifer.isBookmark(
-                        data.restaurant[index],
-                      ),
                       restaurant: data.restaurant[index],
                       onTap: () {
                         Navigator.pushNamed(
@@ -95,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.pushNamed(
                           context,
                           DetailPage.ROUTE_NAME,
-                          arguments: e,
+                          arguments: e.id,
                         );
                       },
                     );

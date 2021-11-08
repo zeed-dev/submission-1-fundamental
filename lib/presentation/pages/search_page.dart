@@ -6,7 +6,6 @@ import 'package:food_store_app/presentation/pages/detail_page.dart';
 import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:food_store_app/presentation/widgets/card_restaruant.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   static const ROUTE_NAME = "/serach-page";
@@ -89,9 +88,6 @@ class _SearchPageState extends State<SearchPage> {
                     vertical: 10,
                   ),
                   child: CardRestaurant(
-                    isBookmark: bookmarkNotifer.isBookmark(
-                      _dataRestaurant[index],
-                    ),
                     restaurant: _dataRestaurant[index],
                     onTap: () {
                       Navigator.pushNamed(
@@ -126,8 +122,6 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    BookmarkNotifer _bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
