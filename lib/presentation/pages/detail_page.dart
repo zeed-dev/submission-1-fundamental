@@ -26,6 +26,16 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController reviewController = TextEditingController();
+  bool isLoading = false;
+
+  setIsLoading(bool value) {
+    setState(() {
+      isLoading = value;
+    });
+  }
+
   @override
   void initState() {
     Future.microtask(() =>
@@ -37,6 +47,11 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
     BookmarkNotifer _bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
+
+    void _clearController() {
+      nameController.clear();
+      reviewController.clear();
+    }
 
     Widget _buildHeader(RestaurantDetail restaurant) {
       return Container(
@@ -190,15 +205,29 @@ class _DetailPageState extends State<DetailPage> {
     }
 
     Widget _buildTextField() {
-      return TextField(
-        onSubmitted: (query) {},
-        decoration: InputDecoration(
-          hintText: "Add Review's",
-          border: OutlineInputBorder(),
-        ),
-        textInputAction: TextInputAction.newline,
-        minLines: 5,
-        maxLines: 5,
+      return Column(
+        children: [
+          TextField(
+            controller: nameController,
+            decoration: InputDecoration(
+              hintText: "Name",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          TextField(
+            controller: reviewController,
+            decoration: InputDecoration(
+              hintText: "Add Review's",
+              border: OutlineInputBorder(),
+            ),
+            textInputAction: TextInputAction.newline,
+            minLines: 2,
+            maxLines: 2,
+          ),
+        ],
       );
     }
 
@@ -258,16 +287,46 @@ class _DetailPageState extends State<DetailPage> {
                   builder: (context) => BasicDialogAlert(
                     title: Text("Review's"),
                     content: Container(
-                      height: 100,
+                      height: 300,
                       child: _buildTextField(),
                     ),
                     actions: [
-                      BasicDialogAction(
-                        title: Text("Add"),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
+                      isLoading
+                          ? CircularProgressIndicator()
+                          : BasicDialogAction(
+                              title: Text("Add"),
+                              onPressed: () async {
+                                setIsLoading(true);
+                                await Provider.of<RestaurantDetailNotifier>(
+                                  context,
+                                  listen: false,
+                                )
+                                    .postAddReview(
+                                  reviewController.text,
+                                  nameController.text,
+                                  restaurant.id,
+                                )
+                                    .then(
+                                  (value) {
+                                    setIsLoading(false);
+                                    Future.microtask(
+                                      () =>
+                                          Provider.of<RestaurantDetailNotifier>(
+                                        context,
+                                        listen: false,
+                                      ).fetchDetailRestaurant(widget.id),
+                                    );
+                                    _clearController();
+                                    Navigator.pop(context);
+                                    Flushbar(
+                                      message: "Add Successfully",
+                                      duration: Duration(seconds: 2),
+                                      backgroundColor: Colors.green,
+                                    ).show(context);
+                                  },
+                                );
+                              },
+                            ),
                     ],
                   ),
                 );

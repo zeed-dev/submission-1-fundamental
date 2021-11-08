@@ -33,11 +33,14 @@ class MyApp extends StatelessWidget {
           create: (_) => RestaurantNotifier(getRestaurant: getIt.getIt()),
         ),
         ChangeNotifierProvider(
-          create: (_) =>
-              RestaurantDetailNotifier(getRestaurantDetail: getIt.getIt()),
+          create: (_) => RestaurantDetailNotifier(
+            getRestaurantDetail: getIt.getIt(),
+            addReview: getIt.getIt(),
+          ),
         ),
         ChangeNotifierProvider(
-          create: (_) => SearechRestaurantNotifier(serachRestaurant: getIt.getIt()),
+          create: (_) =>
+              SearechRestaurantNotifier(serachRestaurant: getIt.getIt()),
         ),
       ],
       child: MaterialApp(

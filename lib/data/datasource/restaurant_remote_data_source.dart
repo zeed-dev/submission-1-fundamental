@@ -11,6 +11,7 @@ abstract class RestaurantRemoteDataSource {
   Future<List<RestaurantModel>?> getRestaurant();
   Future<RestaurantDetailModel> getDetailRestaurant(String id);
   Future<List<RestaurantModel>?> searchRestaurant(String query);
+  Future<String> addReview(String reviews, String name, String id);
 }
 
 class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
@@ -49,14 +50,42 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
 
   @override
   Future<List<RestaurantModel>?> searchRestaurant(String query) async {
-    _logger.d("Fetch serach restaurant...");
     final response = await client.get(Uri.parse("$BASE_URL/search?q=$query"));
-    _logger.d(response.body);
 
     if (response.statusCode == 200) {
       return RestaurantResponse.fromJson(
         json.decode(response.body),
       ).restaurants;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<String> addReview(
+    String reviews,
+    String name,
+    String id,
+  ) async {
+    _logger.d("Add reviews...");
+    String message = "";
+
+    Map body = {
+      "id": "$id",
+      "name": "$name",
+      "review": "$reviews",
+    };
+
+    final response = await client.post(
+      Uri.parse("$BASE_URL/review"),
+      body: json.encode(body),
+      headers: {"Content-Type": "application/json"},
+    );
+    _logger.d(response.body);
+
+    if (response.statusCode == 200) {
+      message = json.decode(response.body)["message"];
+      return message;
     } else {
       throw ServerException();
     }

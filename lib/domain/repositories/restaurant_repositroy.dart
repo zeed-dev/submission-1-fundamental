@@ -7,4 +7,9 @@ abstract class RestaurantRepository {
   Future<Either<Failure, List<Restaurant>>> getRestaurant();
   Future<Either<Failure, RestaurantDetail>> getDetailRestaurant(String id);
   Future<Either<Failure, List<Restaurant>>> searchRestaurant(String query);
+  Future<Either<Failure, String>> addReview(
+    String reviews,
+    String name,
+    String id,
+  );
 }

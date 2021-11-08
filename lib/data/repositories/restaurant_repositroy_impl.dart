@@ -57,4 +57,25 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
       return Left(ConnectionFailure('Failed to connect to the network'));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> addReview(
+    String reviews,
+    String name,
+    String id,
+  ) async {
+    try {
+      final result = await restaurantRemoteDataSource.addReview(
+        reviews,
+        name,
+        id,
+      );
+
+      return Right(result);
+    } on ServerException {
+      return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
 }
