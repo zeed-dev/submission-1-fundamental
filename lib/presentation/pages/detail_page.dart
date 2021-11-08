@@ -200,7 +200,7 @@ class _DetailPageState extends State<DetailPage> {
 
     Widget _buildTextField() {
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: margin, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: margin, vertical: 11),
         child: Column(
           children: [
             TextField(
@@ -537,7 +537,7 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       _buildMenuItems(restaurant.restaurantDetail.menus.drinks),
                       SizedBox(
-                        height: 10,
+                        height: 11,
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: margin),
