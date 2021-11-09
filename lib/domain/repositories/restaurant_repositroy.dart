@@ -12,4 +12,7 @@ abstract class RestaurantRepository {
     String name,
     String id,
   );
+  Future<Either<Failure, String>> saveBookmark(RestaurantDetail restaurant);
+  Future<Either<Failure, String>> removeBookmark(RestaurantDetail restaurant);
+  Future<bool> isAddedToBookmark(String id);
 }

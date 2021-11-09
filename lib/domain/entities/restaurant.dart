@@ -17,6 +17,15 @@ class Restaurant extends Equatable {
   final String city;
   final double rating;
 
+  Restaurant.bookmark({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.pictureId,
+    required this.city,
+    required this.rating,
+  });
+
   factory Restaurant.fromJson(Map<String, dynamic> json) => Restaurant(
         id: json["id"],
         name: json["name"],

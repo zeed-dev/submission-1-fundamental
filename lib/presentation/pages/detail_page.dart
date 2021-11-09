@@ -8,7 +8,6 @@ import 'package:food_store_app/common/state_enum.dart';
 import 'package:food_store_app/domain/entities/customer_review.dart';
 import 'package:food_store_app/domain/entities/drink.dart';
 import 'package:food_store_app/domain/entities/restaurant_detail.dart';
-import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_detail_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -35,13 +34,16 @@ class _DetailPageState extends State<DetailPage> {
     Future.microtask(() =>
         Provider.of<RestaurantDetailNotifier>(context, listen: false)
             .fetchDetailRestaurant(widget.id));
+
+    Future.microtask(() =>
+        Provider.of<RestaurantDetailNotifier>(context, listen: false)
+            .loadBookmarkStatus(widget.id));
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    BookmarkNotifer _bookmarkNotifer = Provider.of<BookmarkNotifer>(context);
-
     void _clearController() {
       nameController.clear();
       reviewController.clear();
@@ -231,7 +233,11 @@ class _DetailPageState extends State<DetailPage> {
       );
     }
 
-    Widget _customBottomNavbarDetail(RestaurantDetail restaurant) {
+    // NOTE: BookMark Remake
+    Widget _customBottomNavbarDetail(
+      RestaurantDetail restaurant,
+      bool isAddedBookmark,
+    ) {
       return Container(
         height: 70,
         width: double.infinity,
@@ -250,17 +256,39 @@ class _DetailPageState extends State<DetailPage> {
         child: Row(
           children: [
             InkWell(
-              onTap: () {
-                _bookmarkNotifer.setRestaurant(restaurant);
-                Flushbar(
-                  message: _bookmarkNotifer.isBookmark(restaurant)
-                      ? "Has been added to the Wishlist"
-                      : "Has been removed from the Wishlist",
-                  duration: Duration(seconds: 3),
-                  backgroundColor: _bookmarkNotifer.isBookmark(restaurant)
-                      ? Colors.blue
-                      : Colors.red,
-                ).show(context);
+              onTap: () async {
+                if (!isAddedBookmark) {
+                  await Provider.of<RestaurantDetailNotifier>(context,
+                          listen: false)
+                      .addBookmark(restaurant);
+                } else {
+                  await Provider.of<RestaurantDetailNotifier>(context,
+                          listen: false)
+                      .removeFromBookmark(restaurant);
+                }
+
+                final msg = Provider.of<RestaurantDetailNotifier>(context,
+                        listen: false)
+                    .bookmarkMessage;
+
+                if (msg == RestaurantDetailNotifier.bookmarkAddSuccessMessage ||
+                    msg ==
+                        RestaurantDetailNotifier.bookmarkRemoveSuccessMessage) {
+                  Flushbar(
+                    message: msg.toString(),
+                    duration: Duration(seconds: 2),
+                    backgroundColor: isAddedBookmark ? Colors.red : Colors.blue,
+                  ).show(context);
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text(msg),
+                      );
+                    },
+                  );
+                }
               },
               child: Container(
                 width: 59,
@@ -270,9 +298,7 @@ class _DetailPageState extends State<DetailPage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
-                  _bookmarkNotifer.isBookmark(restaurant)
-                      ? Icons.bookmark
-                      : Icons.bookmark_outline,
+                  isAddedBookmark ? Icons.bookmark : Icons.bookmark_outline,
                   color: kGrey,
                 ),
               ),
@@ -416,8 +442,10 @@ class _DetailPageState extends State<DetailPage> {
           );
         } else if (restaurant.restaurantDetailState == RequestState.Loaded) {
           return Scaffold(
-            bottomNavigationBar:
-                _customBottomNavbarDetail(restaurant.restaurantDetail),
+            bottomNavigationBar: _customBottomNavbarDetail(
+              restaurant.restaurantDetail,
+              restaurant.isAddedToBookmark,
+            ),
             body: NestedScrollView(
               headerSliverBuilder: (context, isScrolled) {
                 return [
