@@ -5,6 +5,7 @@ import 'package:food_store_app/presentation/pages/main_page.dart';
 import 'package:food_store_app/presentation/pages/search_page.dart';
 import 'package:food_store_app/presentation/pages/onboarding_page.dart';
 import 'package:food_store_app/presentation/pages/splash_page.dart';
+import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:food_store_app/presentation/provider/page_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_detail_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_notifer.dart';
@@ -40,6 +41,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) =>
               SearechRestaurantNotifier(serachRestaurant: getIt.getIt()),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => BookmarkNotifier(getBookmarkRestaurant: getIt.getIt()),
         ),
       ],
       child: MaterialApp(

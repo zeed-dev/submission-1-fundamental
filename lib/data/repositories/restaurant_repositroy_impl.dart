@@ -122,4 +122,10 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
       return Left(DatabaseFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<Restaurant>>> getBookmarkRestaurant() async {
+    final result = await restaurantLocalDataSource.getBookmarkRestaurant();
+    return Right(result.map((e) => e.toEntity()).toList());
+  }
 }

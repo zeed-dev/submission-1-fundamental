@@ -1,5 +1,4 @@
 import 'package:food_store_app/data/model/restaurant_table.dart';
-import 'package:logger/logger.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
@@ -21,8 +20,6 @@ class DatabaseHelper {
   }
 
   static const _TBL_BOOKMARK = "bookmark";
-
-  Logger _logger = Logger();
 
   Future<Database> _initDb() async {
     final path = await getDatabasesPath();
@@ -46,15 +43,11 @@ class DatabaseHelper {
   }
 
   Future<int> insertBookmark(RestaurantTable restaurant) async {
-    _logger.d(restaurant.toJson());
-    _logger.d("INSERT BOOKMARK");
     final db = await database;
     return await db!.insert(_TBL_BOOKMARK, restaurant.toJson());
   }
 
   Future<int> removeRestaurant(RestaurantTable restaurant) async {
-    _logger.d(restaurant.toJson());
-    _logger.d("REMOVE BOOKMARK");
     final db = await database;
     return await db!.delete(
       _TBL_BOOKMARK,
@@ -64,8 +57,6 @@ class DatabaseHelper {
   }
 
   Future<Map<String, dynamic>?> getRestaurantById(String id) async {
-    _logger.d(id);
-    _logger.d("GET RESTAURANT BY ID");
     final db = await database;
     final result = await db!.query(
       _TBL_BOOKMARK,
@@ -78,5 +69,12 @@ class DatabaseHelper {
     } else {
       return null;
     }
+  }
+
+  Future<List<Map<String, dynamic>>> getBookmarkRestaurant() async {
+    final db = await database;
+    final List<Map<String, dynamic>> results = await db!.query(_TBL_BOOKMARK);
+
+    return results;
   }
 }

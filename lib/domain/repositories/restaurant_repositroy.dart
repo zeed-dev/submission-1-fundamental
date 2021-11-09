@@ -15,4 +15,5 @@ abstract class RestaurantRepository {
   Future<Either<Failure, String>> saveBookmark(RestaurantDetail restaurant);
   Future<Either<Failure, String>> removeBookmark(RestaurantDetail restaurant);
   Future<bool> isAddedToBookmark(String id);
+  Future<Either<Failure, List<Restaurant>>> getBookmarkRestaurant();
 }

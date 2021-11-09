@@ -6,7 +6,6 @@ import 'package:food_store_app/domain/usecases/get_bookmark_status.dart';
 import 'package:food_store_app/domain/usecases/get_restaurant_detail.dart';
 import 'package:food_store_app/domain/usecases/remove_bookmark.dart';
 import 'package:food_store_app/domain/usecases/save_bookmark.dart';
-import 'package:logger/logger.dart';
 
 class RestaurantDetailNotifier extends ChangeNotifier {
   static const bookmarkAddSuccessMessage = "Added to Bookmark";
@@ -34,8 +33,6 @@ class RestaurantDetailNotifier extends ChangeNotifier {
     required this.getBookmarkStatus,
     required this.removeBookmark,
   });
-
-  Logger _logger = Logger();
 
   Future<void> fetchDetailRestaurant(String id) async {
     _restauranDetailtState = RequestState.Loading;
@@ -82,11 +79,9 @@ class RestaurantDetailNotifier extends ChangeNotifier {
 
   Future<void> addBookmark(RestaurantDetail restaurant) async {
     final result = await saveRestaurant.execute(restaurant);
-    _logger.d(result);
 
     result.fold((failure) {
       _bookmarkMessage = failure.message;
-      _logger.d(_bookmarkMessage.toString());
     }, (successMsg) {
       _bookmarkMessage = successMsg;
     });
@@ -99,7 +94,6 @@ class RestaurantDetailNotifier extends ChangeNotifier {
 
   Future<void> loadBookmarkStatus(String id) async {
     final result = await getBookmarkStatus.execute(id);
-    _logger.d(result);
     _isAddedtoBookmark = result;
     notifyListeners();
   }

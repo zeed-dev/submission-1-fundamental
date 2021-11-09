@@ -6,6 +6,7 @@ abstract class RestaurantLocalDataSource {
   Future<String> insertBookmark(RestaurantTable restaurant);
   Future<String> removeBookmark(RestaurantTable restaurant);
   Future<RestaurantTable?> getRestaurantById(String id);
+  Future<List<RestaurantTable>> getBookmarkRestaurant();
 }
 
 class RestaurantLocalDataSourceImpl implements RestaurantLocalDataSource {
@@ -40,5 +41,11 @@ class RestaurantLocalDataSourceImpl implements RestaurantLocalDataSource {
     } catch (e) {
       throw DatabaseException(e.toString());
     }
+  }
+
+  @override
+  Future<List<RestaurantTable>> getBookmarkRestaurant() async {
+    final result = await databaseHelper.getBookmarkRestaurant();
+    return result.map((e) => RestaurantTable.fromMap(e)).toList();
   }
 }

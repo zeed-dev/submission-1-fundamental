@@ -22,7 +22,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget _buildDataNotFound() {
     return Center(
       child: LottieBuilder.asset(
-        "assets/trash.json",
+        "assets/84854-empty.json",
         width: 200,
         height: 200,
       ),

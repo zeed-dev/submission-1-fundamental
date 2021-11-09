@@ -4,12 +4,14 @@ import 'package:food_store_app/data/datasource/restaurant_remote_data_source.dar
 import 'package:food_store_app/data/repositories/restaurant_repositroy_impl.dart';
 import 'package:food_store_app/domain/repositories/restaurant_repositroy.dart';
 import 'package:food_store_app/domain/usecases/add_review.dart';
+import 'package:food_store_app/domain/usecases/get_bookmark_restaurant.dart';
 import 'package:food_store_app/domain/usecases/get_bookmark_status.dart';
 import 'package:food_store_app/domain/usecases/get_restaurant.dart';
 import 'package:food_store_app/domain/usecases/get_restaurant_detail.dart';
 import 'package:food_store_app/domain/usecases/remove_bookmark.dart';
 import 'package:food_store_app/domain/usecases/save_bookmark.dart';
 import 'package:food_store_app/domain/usecases/search_restaurant.dart';
+import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_detail_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_notifer.dart';
 import 'package:food_store_app/presentation/provider/search_restaurant_notifier.dart';
@@ -38,6 +40,11 @@ void init() {
       serachRestaurant: getIt(),
     ),
   );
+  getIt.registerFactory(
+    () => BookmarkNotifier(
+      getBookmarkRestaurant: getIt(),
+    ),
+  );
 
   getIt.registerLazySingleton(() => GetRestaurant(getIt()));
   getIt.registerLazySingleton(() => GetRestaurantDetail(getIt()));
@@ -46,6 +53,7 @@ void init() {
   getIt.registerLazySingleton(() => SaveRestaurant(getIt()));
   getIt.registerLazySingleton(() => GetBookmarkStatus(getIt()));
   getIt.registerLazySingleton(() => RemoveBookmark(getIt()));
+  getIt.registerLazySingleton(() => GetBookmarkRestaurant(getIt()));
 
   getIt.registerLazySingleton<RestaurantRepository>(
     () => RestaurantRepositoryImpl(

@@ -1,17 +1,24 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_store_app/common/constants.dart';
-import 'package:food_store_app/domain/entities/restaurant_detail.dart';
+import 'package:food_store_app/common/state_enum.dart';
+import 'package:food_store_app/presentation/pages/detail_page.dart';
+import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
+import 'package:food_store_app/presentation/widgets/card_restaruant.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
-class BookmarkPage extends StatelessWidget {
+class BookmarkPage extends StatefulWidget {
   static const ROUTE_NAME = "/bookmark-page";
 
+  @override
+  _BookmarkPageState createState() => _BookmarkPageState();
+}
+
+class _BookmarkPageState extends State<BookmarkPage> {
   Widget _buildDataNotFound() {
     return Center(
       child: LottieBuilder.asset(
-        "assets/trash.json",
+        "assets/84854-empty.json",
         width: 200,
         height: 200,
       ),
@@ -19,136 +26,71 @@ class BookmarkPage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Bookmark Page",
-            style: kHeading6.copyWith(
-              color: kBlack,
-            ),
-          ),
-          elevation: 1,
-          automaticallyImplyLeading: false,
-          backgroundColor: kWhite,
-        ),
-        body: Container()
-        // ListView.builder(
-        //         itemCount: 5,
-        //         itemBuilder: (context, index) {
-        //           return Padding(
-        //             padding: EdgeInsets.symmetric(
-        //               horizontal: margin,
-        //               vertical: 10,
-        //             ),
-        //             child: CardRestaurantBookmark(
-        //               restaurant: _bookmarkNotifer.bookmark[index],
-        //               onTap: () {
-        //                 Navigator.pushNamed(
-        //                   context,
-        //                   DetailPage.ROUTE_NAME,
-        //                   arguments: _bookmarkNotifer.bookmark[index].id,
-        //                 );
-        //               },
-        //             ),
-        //           );
-        //         },
-        //       ),
-        );
+  void initState() {
+    Future.microtask(() => Provider.of<BookmarkNotifier>(context, listen: false)
+        .fetchBookmarkRestaurant());
+    super.initState();
   }
-}
-
-class CardRestaurantBookmark extends StatelessWidget {
-  final RestaurantDetail? restaurant;
-  final Function? onTap;
-
-  CardRestaurantBookmark({
-    required this.restaurant,
-    required this.onTap,
-  });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        onTap!();
-      },
-      child: Container(
-        height: 179,
-        width: 257,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Color(0xffF6F6F6),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Bookmark Page",
+          style: kHeading6.copyWith(
+            color: kBlack,
+          ),
         ),
-        padding: EdgeInsets.only(
-          top: 20,
-          left: 20,
-          right: 10,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                height: 46,
-                width: 46,
-                imageUrl: "$IMAGE_BASE_URL${restaurant!.pictureId}",
-                placeholder: (context, url) => Center(
-                  child: CircularProgressIndicator(),
-                ),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-                fit: BoxFit.cover,
-              ),
-            ),
-            SizedBox(
-              height: 6,
-            ),
-            Text(
-              restaurant!.name,
-              style: kSubtitle.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Text(
-              restaurant!.description,
-              maxLines: 2,
-              style: kBodyText,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                RatingBarIndicator(
-                  rating: restaurant!.rating,
-                  itemCount: 5,
-                  itemBuilder: (context, index) => Icon(
-                    Icons.star,
-                    color: Color(0xFFffc300),
-                  ),
-                  itemSize: 24,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "-",
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                  child: Text(
-                    restaurant!.city,
-                    overflow: TextOverflow.ellipsis,
-                    style: kBodyText,
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
+        elevation: 1,
+        automaticallyImplyLeading: false,
+        backgroundColor: kWhite,
+      ),
+      body: Consumer<BookmarkNotifier>(
+        builder: (context, restaurant, child) {
+          if (restaurant.bookmarkRestaurantState == RequestState.Loading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (restaurant.bookmarkRestaurantState ==
+              RequestState.Loaded) {
+            if (restaurant.bookmarkRestaurant.isEmpty) {
+              return _buildDataNotFound();
+            } else {
+              return ListView.builder(
+                itemCount: restaurant.bookmarkRestaurant.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: margin,
+                      vertical: 10,
+                    ),
+                    child: CardRestaurant(
+                      restaurant: restaurant.bookmarkRestaurant[index],
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          DetailPage.ROUTE_NAME,
+                          arguments: restaurant.bookmarkRestaurant[index].id,
+                        ).then(
+                          (value) => Future.microtask(
+                            () => Provider.of<BookmarkNotifier>(context,
+                                    listen: false)
+                                .fetchBookmarkRestaurant(),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              );
+            }
+          } else {
+            return Center(
+              child: Text(restaurant.message),
+            );
+          }
+        },
       ),
     );
   }
