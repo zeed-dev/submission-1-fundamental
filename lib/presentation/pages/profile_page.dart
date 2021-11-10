@@ -139,8 +139,14 @@ class ProfilePage extends StatelessWidget {
                   onTap: () {},
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Scheduling News'),
+                    Text(
+                      'Scheduling News',
+                      style: kSubtitle.copyWith(
+                        fontSize: 13,
+                      ),
+                    ),
                     Consumer<SchedulingNotifier>(
                       builder: (context, scheduled, _) {
                         return Switch.adaptive(
