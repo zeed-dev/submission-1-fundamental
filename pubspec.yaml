@@ -50,6 +50,8 @@ flutter_icons:
   image_path: "assets/splash.png"
 
 dev_dependencies:
+  mockito: ^5.0.8
+  build_runner: ^2.0.4
   flutter_test:
     sdk: flutter
 
