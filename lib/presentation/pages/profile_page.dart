@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:food_store_app/common/constants.dart';
+import 'package:food_store_app/presentation/provider/scheduling_notifier.dart';
+import 'package:food_store_app/presentation/widgets/custom_dialog.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatelessWidget {
   static const ROUTE_NAME = "/profile-page";
@@ -133,6 +138,25 @@ class ProfilePage extends StatelessWidget {
                   text: "Rate App",
                   onTap: () {},
                 ),
+                Row(
+                  children: [
+                    Text('Scheduling News'),
+                    Consumer<SchedulingNotifier>(
+                      builder: (context, scheduled, _) {
+                        return Switch.adaptive(
+                          value: scheduled.isScheduled,
+                          onChanged: (value) async {
+                            if (Platform.isIOS) {
+                              customDialog(context);
+                            } else {
+                              scheduled.scheduledRestaurant(value);
+                            }
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                )
               ],
             ),
           ),
