@@ -1,10 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:food_store_app/data/model/restaurant_response.dart';
 import 'package:food_store_app/domain/entities/restaurant.dart';
-import 'package:food_store_app/external/navigation.dart';
-import 'package:food_store_app/presentation/pages/detail_page.dart';
+import 'package:logger/logger.dart';
 import 'package:rxdart/subjects.dart';
 
 final selectNotificationSubject = BehaviorSubject<String>();
@@ -78,12 +77,15 @@ class NotificationHelper {
     );
   }
 
-  void configureSelectNotificationSubject() {
+  Logger _logger = Logger();
+
+  void configureSelectNotificationSubject(BuildContext context, String route) {
     selectNotificationSubject.stream.listen(
       (String payload) async {
-        var data = RestaurantResponse.fromJson(json.decode(payload));
-        var restaurant = data.restaurants![0];
-        Navigation.intentWithData(DetailPage.ROUTE_NAME, restaurant.id);
+        var data = Restaurant.fromJson(json.decode(payload));
+        var restaurant = data;
+        _logger.d(restaurant.id);
+        await Navigator.pushNamed(context, route, arguments: restaurant.id);
       },
     );
   }
