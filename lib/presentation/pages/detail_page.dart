@@ -271,9 +271,11 @@ class _DetailPageState extends State<DetailPage> {
                         listen: false)
                     .bookmarkMessage;
 
-                if (msg == RestaurantDetailNotifier.bookmarkAddSuccessMessage ||
+                if (msg ==
+                        RestaurantDetailNotifier.restaurantAddSuccessMessage ||
                     msg ==
-                        RestaurantDetailNotifier.bookmarkRemoveSuccessMessage) {
+                        RestaurantDetailNotifier
+                            .restaurantRemoveSuccessMessage) {
                   Flushbar(
                     message: msg.toString(),
                     duration: Duration(seconds: 2),

@@ -87,11 +87,11 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
   Logger _logger = Logger();
 
   @override
-  Future<Either<Failure, String>> saveBookmark(
+  Future<Either<Failure, String>> saveFavorite(
       RestaurantDetail restaurant) async {
     try {
       final result = await restaurantLocalDataSource
-          .insertBookmark(RestaurantTable.fromEntity(restaurant));
+          .insertFavorite(RestaurantTable.fromEntity(restaurant));
 
       _logger.d(result);
 
@@ -104,16 +104,16 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
   }
 
   @override
-  Future<bool> isAddedToBookmark(String id) async {
+  Future<bool> isAddedToFavorite(String id) async {
     final result = await restaurantLocalDataSource.getRestaurantById(id);
     return result != null;
   }
 
   @override
-  Future<Either<Failure, String>> removeBookmark(
+  Future<Either<Failure, String>> removeFavorite(
       RestaurantDetail restaurant) async {
     try {
-      final result = await restaurantLocalDataSource.removeBookmark(
+      final result = await restaurantLocalDataSource.removeFavorite(
         RestaurantTable.fromEntity(restaurant),
       );
 
@@ -124,8 +124,8 @@ class RestaurantRepositoryImpl implements RestaurantRepository {
   }
 
   @override
-  Future<Either<Failure, List<Restaurant>>> getBookmarkRestaurant() async {
-    final result = await restaurantLocalDataSource.getBookmarkRestaurant();
+  Future<Either<Failure, List<Restaurant>>> getFavoriteRestaurant() async {
+    final result = await restaurantLocalDataSource.getRestaurantRestaurant();
     return Right(result.map((e) => e.toEntity()).toList());
   }
 }

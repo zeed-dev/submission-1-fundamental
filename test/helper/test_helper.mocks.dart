@@ -82,27 +82,27 @@ class MockRestaurantRepository extends _i1.Mock
                   _FakeEither_0<_i7.Failure, String>()))
           as _i6.Future<_i2.Either<_i7.Failure, String>>);
   @override
-  _i6.Future<_i2.Either<_i7.Failure, String>> saveBookmark(
+  _i6.Future<_i2.Either<_i7.Failure, String>> saveFavorite(
           _i9.RestaurantDetail? restaurant) =>
-      (super.noSuchMethod(Invocation.method(#saveBookmark, [restaurant]),
+      (super.noSuchMethod(Invocation.method(#saveFavorite, [restaurant]),
               returnValue: Future<_i2.Either<_i7.Failure, String>>.value(
                   _FakeEither_0<_i7.Failure, String>()))
           as _i6.Future<_i2.Either<_i7.Failure, String>>);
   @override
-  _i6.Future<_i2.Either<_i7.Failure, String>> removeBookmark(
+  _i6.Future<_i2.Either<_i7.Failure, String>> removeFavorite(
           _i9.RestaurantDetail? restaurant) =>
-      (super.noSuchMethod(Invocation.method(#removeBookmark, [restaurant]),
+      (super.noSuchMethod(Invocation.method(#removeFavorite, [restaurant]),
               returnValue: Future<_i2.Either<_i7.Failure, String>>.value(
                   _FakeEither_0<_i7.Failure, String>()))
           as _i6.Future<_i2.Either<_i7.Failure, String>>);
   @override
-  _i6.Future<bool> isAddedToBookmark(String? id) =>
-      (super.noSuchMethod(Invocation.method(#isAddedToBookmark, [id]),
+  _i6.Future<bool> isAddedToFavorite(String? id) =>
+      (super.noSuchMethod(Invocation.method(#isAddedToFavorite, [id]),
           returnValue: Future<bool>.value(false)) as _i6.Future<bool>);
   @override
   _i6.Future<_i2.Either<_i7.Failure, List<_i8.Restaurant>>>
-      getBookmarkRestaurant() => (super.noSuchMethod(
-              Invocation.method(#getBookmarkRestaurant, []),
+      getFavoriteRestaurant() => (super.noSuchMethod(
+              Invocation.method(#getFavoriteRestaurant, []),
               returnValue:
                   Future<_i2.Either<_i7.Failure, List<_i8.Restaurant>>>.value(
                       _FakeEither_0<_i7.Failure, List<_i8.Restaurant>>()))
@@ -154,12 +154,12 @@ class MockRestaurantLocalDataSource extends _i1.Mock
   }
 
   @override
-  _i6.Future<String> insertBookmark(_i13.RestaurantTable? restaurant) =>
-      (super.noSuchMethod(Invocation.method(#insertBookmark, [restaurant]),
+  _i6.Future<String> insertFavorite(_i13.RestaurantTable? restaurant) =>
+      (super.noSuchMethod(Invocation.method(#insertFavorite, [restaurant]),
           returnValue: Future<String>.value('')) as _i6.Future<String>);
   @override
-  _i6.Future<String> removeBookmark(_i13.RestaurantTable? restaurant) =>
-      (super.noSuchMethod(Invocation.method(#removeBookmark, [restaurant]),
+  _i6.Future<String> removeFavorite(_i13.RestaurantTable? restaurant) =>
+      (super.noSuchMethod(Invocation.method(#removeFavorite, [restaurant]),
           returnValue: Future<String>.value('')) as _i6.Future<String>);
   @override
   _i6.Future<_i13.RestaurantTable?> getRestaurantById(String? id) =>
@@ -167,8 +167,8 @@ class MockRestaurantLocalDataSource extends _i1.Mock
               returnValue: Future<_i13.RestaurantTable?>.value())
           as _i6.Future<_i13.RestaurantTable?>);
   @override
-  _i6.Future<List<_i13.RestaurantTable>> getBookmarkRestaurant() =>
-      (super.noSuchMethod(Invocation.method(#getBookmarkRestaurant, []),
+  _i6.Future<List<_i13.RestaurantTable>> getRestaurantRestaurant() =>
+      (super.noSuchMethod(Invocation.method(#getRestaurantRestaurant, []),
               returnValue: Future<List<_i13.RestaurantTable>>.value(
                   <_i13.RestaurantTable>[]))
           as _i6.Future<List<_i13.RestaurantTable>>);
@@ -190,8 +190,8 @@ class MockDatabaseHelper extends _i1.Mock implements _i14.DatabaseHelper {
               returnValue: Future<_i15.Database?>.value())
           as _i6.Future<_i15.Database?>);
   @override
-  _i6.Future<int> insertBookmark(_i13.RestaurantTable? restaurant) =>
-      (super.noSuchMethod(Invocation.method(#insertBookmark, [restaurant]),
+  _i6.Future<int> insertFavorite(_i13.RestaurantTable? restaurant) =>
+      (super.noSuchMethod(Invocation.method(#insertFavorite, [restaurant]),
           returnValue: Future<int>.value(0)) as _i6.Future<int>);
   @override
   _i6.Future<int> removeRestaurant(_i13.RestaurantTable? restaurant) =>
@@ -203,8 +203,8 @@ class MockDatabaseHelper extends _i1.Mock implements _i14.DatabaseHelper {
               returnValue: Future<Map<String, dynamic>?>.value())
           as _i6.Future<Map<String, dynamic>?>);
   @override
-  _i6.Future<List<Map<String, dynamic>>> getBookmarkRestaurant() =>
-      (super.noSuchMethod(Invocation.method(#getBookmarkRestaurant, []),
+  _i6.Future<List<Map<String, dynamic>>> getFavoriteRestaurant() =>
+      (super.noSuchMethod(Invocation.method(#getFavoriteRestaurant, []),
               returnValue: Future<List<Map<String, dynamic>>>.value(
                   <Map<String, dynamic>>[]))
           as _i6.Future<List<Map<String, dynamic>>>);

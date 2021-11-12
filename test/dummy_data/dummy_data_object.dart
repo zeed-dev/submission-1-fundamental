@@ -1,5 +1,10 @@
 import 'package:food_store_app/data/model/restaurant_table.dart';
+import 'package:food_store_app/domain/entities/customer_review.dart';
+import 'package:food_store_app/domain/entities/drink.dart';
+import 'package:food_store_app/domain/entities/menu.dart';
 import 'package:food_store_app/domain/entities/restaurant.dart';
+import 'package:food_store_app/domain/entities/restaurant_detail.dart';
+import 'package:food_store_app/domain/entities/category.dart' as categories;
 
 final testRestaurant = Restaurant(
   id: "dy62fuwe6w8kfw1e867",
@@ -13,20 +18,44 @@ final testRestaurant = Restaurant(
 
 final testRestaurantList = [testRestaurant];
 
-// final testMovieDetail = MovieDetail(
-//   adult: false,
-//   backdropPath: 'backdropPath',
-//   genres: [Genre(id: 1, name: 'Action')],
-//   id: 1,
-//   originalTitle: 'originalTitle',
-//   overview: 'overview',
-//   posterPath: 'posterPath',
-//   releaseDate: 'releaseDate',
-//   runtime: 120,
-//   title: 'title',
-//   voteAverage: 1,
-//   voteCount: 1,
-// );
+final testRestaurantDetail = RestaurantDetail(
+  id: "dy62fuwe6w8kfw1e867",
+  name: "name",
+  description: "description",
+  city: "Medan",
+  address: "Jln. Pandeglang no 19",
+  pictureId: "14",
+  categories: [
+    categories.Category(name: "Italia"),
+    categories.Category(name: "Modern"),
+  ],
+  menus: Menus(
+    foods: [
+      Drink(name: "Paket rosemary"),
+      Drink(name: "Toastie salmon"),
+      Drink(name: "Bebek crepes"),
+      Drink(name: "Salad lengkeng"),
+    ],
+    drinks: [
+      Drink(name: "Es krim"),
+      Drink(name: "Sirup"),
+      Drink(name: "Jus apel"),
+      Drink(name: "Jus jeruk"),
+      Drink(name: "Coklat panas"),
+      Drink(name: "Air"),
+      Drink(name: "Jus alpukat"),
+      Drink(name: "Jus mangga"),
+      Drink(name: "Teh manis"),
+      Drink(name: "Kopi espresso"),
+      Drink(name: "Minuman soda"),
+      Drink(name: "Jus tomat"),
+    ],
+  ),
+  rating: 4.2,
+  customerReviews: [
+    CustomerReview(name: "ziad", review: "enak", date: "10 November 2021")
+  ],
+);
 
 final testBookmarkRestaurant = Restaurant.bookmark(
   id: "dy62fuwe6w8kfw1e867",
@@ -57,12 +86,3 @@ final testRestaurantMap = {
   "city": "Surabaya",
   "rating": "4.8",
 };
-
-// final testRestaurantMap = {
-//   "id": "dy62fuwe6w8kfw1e867",
-//   "name": "name",
-//   "description": "description",
-//   "pictureId": "pictureId",
-//   "city": "city",
-//   "rating": "rating",
-// };

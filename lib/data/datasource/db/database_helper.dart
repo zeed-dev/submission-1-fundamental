@@ -19,7 +19,7 @@ class DatabaseHelper {
     return _database;
   }
 
-  static const _TBL_BOOKMARK = "bookmark";
+  static const _TBL_FAVORITE = "favorite";
 
   Future<Database> _initDb() async {
     final path = await getDatabasesPath();
@@ -31,7 +31,7 @@ class DatabaseHelper {
 
   void _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE $_TBL_BOOKMARK (
+      CREATE TABLE $_TBL_FAVORITE (
         id TEXT NOT NULL UNIQUE,
         name TEXT,
         description TEXT,
@@ -42,15 +42,15 @@ class DatabaseHelper {
     ''');
   }
 
-  Future<int> insertBookmark(RestaurantTable restaurant) async {
+  Future<int> insertFavorite(RestaurantTable restaurant) async {
     final db = await database;
-    return await db!.insert(_TBL_BOOKMARK, restaurant.toJson());
+    return await db!.insert(_TBL_FAVORITE, restaurant.toJson());
   }
 
   Future<int> removeRestaurant(RestaurantTable restaurant) async {
     final db = await database;
     return await db!.delete(
-      _TBL_BOOKMARK,
+      _TBL_FAVORITE,
       where: "id = ?",
       whereArgs: [restaurant.id],
     );
@@ -59,7 +59,7 @@ class DatabaseHelper {
   Future<Map<String, dynamic>?> getRestaurantById(String id) async {
     final db = await database;
     final result = await db!.query(
-      _TBL_BOOKMARK,
+      _TBL_FAVORITE,
       where: "id = ?",
       whereArgs: [id],
     );
@@ -71,9 +71,9 @@ class DatabaseHelper {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getBookmarkRestaurant() async {
+  Future<List<Map<String, dynamic>>> getFavoriteRestaurant() async {
     final db = await database;
-    final List<Map<String, dynamic>> results = await db!.query(_TBL_BOOKMARK);
+    final List<Map<String, dynamic>> results = await db!.query(_TBL_FAVORITE);
 
     return results;
   }

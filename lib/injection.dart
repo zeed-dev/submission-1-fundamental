@@ -4,14 +4,14 @@ import 'package:food_store_app/data/datasource/restaurant_remote_data_source.dar
 import 'package:food_store_app/data/repositories/restaurant_repositroy_impl.dart';
 import 'package:food_store_app/domain/repositories/restaurant_repositroy.dart';
 import 'package:food_store_app/domain/usecases/add_review.dart';
-import 'package:food_store_app/domain/usecases/get_bookmark_restaurant.dart';
-import 'package:food_store_app/domain/usecases/get_bookmark_status.dart';
+import 'package:food_store_app/domain/usecases/get_favorite_restaurant.dart';
+import 'package:food_store_app/domain/usecases/get_favorite_status.dart';
 import 'package:food_store_app/domain/usecases/get_restaurant.dart';
 import 'package:food_store_app/domain/usecases/get_restaurant_detail.dart';
-import 'package:food_store_app/domain/usecases/remove_bookmark.dart';
-import 'package:food_store_app/domain/usecases/save_bookmark.dart';
+import 'package:food_store_app/domain/usecases/remove_favorite.dart';
+import 'package:food_store_app/domain/usecases/save_favorite.dart';
 import 'package:food_store_app/domain/usecases/search_restaurant.dart';
-import 'package:food_store_app/presentation/provider/bookmark_notifier.dart';
+import 'package:food_store_app/presentation/provider/favorite_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_detail_notifier.dart';
 import 'package:food_store_app/presentation/provider/restaurant_notifer.dart';
 import 'package:food_store_app/presentation/provider/search_restaurant_notifier.dart';
@@ -31,8 +31,8 @@ void init() {
       getRestaurantDetail: getIt(),
       addReview: getIt(),
       saveRestaurant: getIt(),
-      getBookmarkStatus: getIt(),
-      removeBookmark: getIt(),
+      getFavoriteStatus: getIt(),
+      removeFavorite: getIt(),
     ),
   );
   getIt.registerFactory(
@@ -41,8 +41,8 @@ void init() {
     ),
   );
   getIt.registerFactory(
-    () => BookmarkNotifier(
-      getBookmarkRestaurant: getIt(),
+    () => FavoriteNotifier(
+      getFavoriteRestaurant: getIt(),
     ),
   );
 
@@ -51,9 +51,9 @@ void init() {
   getIt.registerLazySingleton(() => SerachRestaurant(getIt()));
   getIt.registerLazySingleton(() => AddReview(getIt()));
   getIt.registerLazySingleton(() => SaveRestaurant(getIt()));
-  getIt.registerLazySingleton(() => GetBookmarkStatus(getIt()));
-  getIt.registerLazySingleton(() => RemoveBookmark(getIt()));
-  getIt.registerLazySingleton(() => GetBookmarkRestaurant(getIt()));
+  getIt.registerLazySingleton(() => GetFavoriteStatus(getIt()));
+  getIt.registerLazySingleton(() => RemoveFavorite(getIt()));
+  getIt.registerLazySingleton(() => GetFavoriteRestaurant(getIt()));
 
   getIt.registerLazySingleton<RestaurantRepository>(
     () => RestaurantRepositoryImpl(

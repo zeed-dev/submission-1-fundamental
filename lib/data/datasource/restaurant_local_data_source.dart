@@ -3,10 +3,10 @@ import 'package:food_store_app/data/datasource/db/database_helper.dart';
 import 'package:food_store_app/data/model/restaurant_table.dart';
 
 abstract class RestaurantLocalDataSource {
-  Future<String> insertBookmark(RestaurantTable restaurant);
-  Future<String> removeBookmark(RestaurantTable restaurant);
+  Future<String> insertFavorite(RestaurantTable restaurant);
+  Future<String> removeFavorite(RestaurantTable restaurant);
   Future<RestaurantTable?> getRestaurantById(String id);
-  Future<List<RestaurantTable>> getBookmarkRestaurant();
+  Future<List<RestaurantTable>> getRestaurantRestaurant();
 }
 
 class RestaurantLocalDataSourceImpl implements RestaurantLocalDataSource {
@@ -15,10 +15,10 @@ class RestaurantLocalDataSourceImpl implements RestaurantLocalDataSource {
   RestaurantLocalDataSourceImpl({required this.databaseHelper});
 
   @override
-  Future<String> insertBookmark(RestaurantTable restaurant) async {
+  Future<String> insertFavorite(RestaurantTable restaurant) async {
     try {
-      await databaseHelper.insertBookmark(restaurant);
-      return "Added to Bookmark";
+      await databaseHelper.insertFavorite(restaurant);
+      return "Added to Favorite";
     } catch (e) {
       throw DatabaseException(e.toString());
     }
@@ -34,18 +34,18 @@ class RestaurantLocalDataSourceImpl implements RestaurantLocalDataSource {
   }
 
   @override
-  Future<String> removeBookmark(RestaurantTable restaurant) async {
+  Future<String> removeFavorite(RestaurantTable restaurant) async {
     try {
       await databaseHelper.removeRestaurant(restaurant);
-      return "Removed from Bookmark";
+      return "Removed from Favorite";
     } catch (e) {
       throw DatabaseException(e.toString());
     }
   }
 
   @override
-  Future<List<RestaurantTable>> getBookmarkRestaurant() async {
-    final result = await databaseHelper.getBookmarkRestaurant();
+  Future<List<RestaurantTable>> getRestaurantRestaurant() async {
+    final result = await databaseHelper.getFavoriteRestaurant();
     return result.map((e) => RestaurantTable.fromMap(e)).toList();
   }
 }

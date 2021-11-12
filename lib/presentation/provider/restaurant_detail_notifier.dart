@@ -2,14 +2,14 @@ import 'package:flutter/widgets.dart';
 import 'package:food_store_app/common/state_enum.dart';
 import 'package:food_store_app/domain/entities/restaurant_detail.dart';
 import 'package:food_store_app/domain/usecases/add_review.dart';
-import 'package:food_store_app/domain/usecases/get_bookmark_status.dart';
+import 'package:food_store_app/domain/usecases/get_favorite_status.dart';
 import 'package:food_store_app/domain/usecases/get_restaurant_detail.dart';
-import 'package:food_store_app/domain/usecases/remove_bookmark.dart';
-import 'package:food_store_app/domain/usecases/save_bookmark.dart';
+import 'package:food_store_app/domain/usecases/remove_favorite.dart';
+import 'package:food_store_app/domain/usecases/save_favorite.dart';
 
 class RestaurantDetailNotifier extends ChangeNotifier {
-  static const bookmarkAddSuccessMessage = "Added to Bookmark";
-  static const bookmarkRemoveSuccessMessage = "Removed from Bookmark";
+  static const restaurantAddSuccessMessage = "Added to Favorite";
+  static const restaurantRemoveSuccessMessage = "Removed from Favorite";
 
   late RestaurantDetail _restaurantDetail;
   RestaurantDetail get restaurantDetail => _restaurantDetail;
@@ -23,15 +23,15 @@ class RestaurantDetailNotifier extends ChangeNotifier {
   final GetRestaurantDetail getRestaurantDetail;
   final AddReview addReview;
   final SaveRestaurant saveRestaurant;
-  final GetBookmarkStatus getBookmarkStatus;
-  final RemoveBookmark removeBookmark;
+  final GetFavoriteStatus getFavoriteStatus;
+  final RemoveFavorite removeFavorite;
 
   RestaurantDetailNotifier({
     required this.getRestaurantDetail,
     required this.addReview,
     required this.saveRestaurant,
-    required this.getBookmarkStatus,
-    required this.removeBookmark,
+    required this.getFavoriteStatus,
+    required this.removeFavorite,
   });
 
   Future<void> fetchDetailRestaurant(String id) async {
@@ -93,13 +93,13 @@ class RestaurantDetailNotifier extends ChangeNotifier {
   bool get isAddedToBookmark => _isAddedtoBookmark;
 
   Future<void> loadBookmarkStatus(String id) async {
-    final result = await getBookmarkStatus.execute(id);
+    final result = await getFavoriteStatus.execute(id);
     _isAddedtoBookmark = result;
     notifyListeners();
   }
 
   Future<void> removeFromBookmark(RestaurantDetail restaurant) async {
-    final result = await removeBookmark.execute(restaurant);
+    final result = await removeFavorite.execute(restaurant);
 
     result.fold((failure) async {
       _bookmarkMessage = failure.message;

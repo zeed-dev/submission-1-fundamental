@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:food_store_app/common/constants.dart';
 import 'package:food_store_app/external/notification_helper.dart';
-import 'package:food_store_app/presentation/pages/bookmark_page.dart';
+import 'package:food_store_app/presentation/pages/favorite_page.dart';
 import 'package:food_store_app/presentation/pages/detail_page.dart';
 import 'package:food_store_app/presentation/pages/home_page.dart';
 import 'package:food_store_app/presentation/pages/profile_page.dart';
 import 'package:food_store_app/presentation/provider/page_notifier.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -18,7 +17,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final NotificationHelper _notificationHelper = NotificationHelper();
-  Logger _logger = Logger();
 
   Widget _buildBottomNavBar({required PageNotifier? pageNotifier}) {
     return BottomNavigationBar(
@@ -34,8 +32,8 @@ class _MainPageState extends State<MainPage> {
           label: "Home",
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.bookmark_border_outlined),
-          label: "Bookmark",
+          icon: Icon(Icons.favorite_outline),
+          label: "Favorite",
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person_outline),
@@ -48,7 +46,6 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    _logger.d("JALANKAN INI");
     _notificationHelper.configureSelectNotificationSubject(
       context,
       DetailPage.ROUTE_NAME,
@@ -61,7 +58,7 @@ class _MainPageState extends State<MainPage> {
 
     List _screen = [
       HomePage(),
-      BookmarkPage(),
+      FavoritePage(),
       ProfilePage(),
     ];
 
