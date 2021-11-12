@@ -89,12 +89,12 @@ class RestaurantDetailNotifier extends ChangeNotifier {
     await loadBookmarkStatus(restaurant.id);
   }
 
-  bool _isAddedtoBookmark = false;
-  bool get isAddedToBookmark => _isAddedtoBookmark;
+  bool _isAddedtoFavorite = false;
+  bool get isAddedtoFavorite => _isAddedtoFavorite;
 
   Future<void> loadBookmarkStatus(String id) async {
     final result = await getFavoriteStatus.execute(id);
-    _isAddedtoBookmark = result;
+    _isAddedtoFavorite = result;
     notifyListeners();
   }
 

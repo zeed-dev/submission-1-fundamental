@@ -236,7 +236,7 @@ class _DetailPageState extends State<DetailPage> {
     // NOTE: BookMark Remake
     Widget _customBottomNavbarDetail(
       RestaurantDetail restaurant,
-      bool isAddedBookmark,
+      bool isAddedtoFavorite,
     ) {
       return Container(
         height: 70,
@@ -257,7 +257,7 @@ class _DetailPageState extends State<DetailPage> {
           children: [
             InkWell(
               onTap: () async {
-                if (!isAddedBookmark) {
+                if (!isAddedtoFavorite) {
                   await Provider.of<RestaurantDetailNotifier>(context,
                           listen: false)
                       .addBookmark(restaurant);
@@ -279,7 +279,8 @@ class _DetailPageState extends State<DetailPage> {
                   Flushbar(
                     message: msg.toString(),
                     duration: Duration(seconds: 2),
-                    backgroundColor: isAddedBookmark ? Colors.red : Colors.blue,
+                    backgroundColor:
+                        isAddedtoFavorite ? Colors.red : Colors.blue,
                   ).show(context);
                 } else {
                   showDialog(
@@ -300,7 +301,7 @@ class _DetailPageState extends State<DetailPage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
-                  isAddedBookmark ? Icons.bookmark : Icons.bookmark_outline,
+                  isAddedtoFavorite ? Icons.favorite : Icons.favorite_outline,
                   color: kGrey,
                 ),
               ),
@@ -446,7 +447,7 @@ class _DetailPageState extends State<DetailPage> {
           return Scaffold(
             bottomNavigationBar: _customBottomNavbarDetail(
               restaurant.restaurantDetail,
-              restaurant.isAddedToBookmark,
+              restaurant.isAddedtoFavorite,
             ),
             body: NestedScrollView(
               headerSliverBuilder: (context, isScrolled) {
